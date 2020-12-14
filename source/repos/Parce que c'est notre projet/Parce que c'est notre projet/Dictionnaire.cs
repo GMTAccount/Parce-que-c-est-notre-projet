@@ -13,10 +13,9 @@ namespace Parce_que_c_est_notre_projet
 
 
         //Constructeur
-        public Dictionnaire(string filename, string langue)
+        public Dictionnaire(StreamReader fichier, string langue)
         {
             this.langue = langue;
-            StreamReader fichier = new StreamReader(filename);
             bool testFace = true;
             bool testNbDe = true;
             try
@@ -24,9 +23,16 @@ namespace Parce_que_c_est_notre_projet
                 string[] ligne = null;
                 do
                 {
-                    ligne = fichier.ReadLine().Split(" ");
                     int cle = Convert.ToInt32(fichier.ReadLine());
-                    this.mots.Add(cle, ligne);
+                    if(cle != 0)
+                    {
+                        ligne = fichier.ReadLine().Split(" ");
+                        this.mots.Add(cle, ligne);
+                    }
+                    else
+                    {
+                        ligne = null;
+                    }
                 }
                 while (ligne != null);
             }
@@ -55,15 +61,21 @@ namespace Parce_que_c_est_notre_projet
             get { return this.langue; }
         }
 
+        public SortedList<int, string[]> Mots
+        {
+            get { return this.mots; }
+        }
 
         //Méthodes
         public bool RechercheDichoRecursif(int debut, int fin, string mot)
         {
+            Console.WriteLine("OUI");
             int longueur = mot.Length;
             string[] tableau = this.mots[longueur];
             if (mot != null && mot.Length != 0)
             {
-                //if (fin - debut == 2 && t[debut + 1] == elt) return debut + 1;
+                if (fin - debut == 2 && tableau[debut + 1] == mot) return true;
+                if (fin - debut == 2 && tableau[debut + 1] != mot) return false;
                 if (tableau[debut] == mot) return true;
                 if (tableau[fin] == mot) return true;
                 switch(Compare(tableau[(debut + fin) / 2], mot))
@@ -85,9 +97,14 @@ namespace Parce_que_c_est_notre_projet
                             return RechercheDichoRecursif(debut, fin, mot);
                             break;
                         }
+                    default:
+                        {
+                            return false;
+                            break;
+                        }
                 }
             }
-            return false;	   		     	 	 
+            return false;
         }
 
         public static int Compare(string stra, string strb)

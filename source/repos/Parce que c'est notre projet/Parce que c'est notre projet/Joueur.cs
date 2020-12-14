@@ -13,15 +13,17 @@ namespace Parce_que_c_est_notre_projet
 
 
         //Constructeur
-        public Joueur(int compt, List<string> mots)
+        public Joueur(int compt, string nom)
         {
             this.score = 0;
-            this.motsTrouves = mots;
-            while(this.nom == null && this.nom.Length != 0)
+            this.motsTrouves = new List<string>();
+            /*do
             {
                 Console.WriteLine("Veuillez entrer le nom du joueur " + compt + " :");
                 this.nom = Console.ReadLine().ToUpper();
-            }
+            }*/
+            this.nom = nom;
+            while (this.nom == null && this.nom.Length != 0);
         }
 
 
@@ -33,6 +35,7 @@ namespace Parce_que_c_est_notre_projet
         public int Score
         {
             get { return this.score; }
+            set { this.score = this.score + value; }
         }
         public List<string> MotTrouve
         {

@@ -65,7 +65,7 @@ namespace Parce_que_c_est_notre_projet
         public string ToString()
         {
             string s = "";
-            if(this.valeurSup != null)
+            if(this.valeurSup != null && valeurSup.GetLength(0)!=0 && valeurSup.GetLength(1)!=0)
             {
                 for (int i = 0; i < this.valeurSup.GetLength(0); i++)
                 {
@@ -77,6 +77,87 @@ namespace Parce_que_c_est_notre_projet
                 }
             }
             return s;
+        }
+
+        public bool Test_Plateau(string mot, int posimot, List<int> positionMot = null)
+        {
+            bool estPresent = false;
+            if(posimot == 0)
+            {
+                for(int i = 0; i < this.valeurSup.GetLength(0); i++)
+                {
+                    for (int j = 0; j < this.valeurSup.GetLength(1); j++)
+                    {
+                        if(this.valeurSup[i,j] == Convert.ToString(mot[0]))
+                        {
+                            positionMot = new List<int>();
+                            positionMot.Add(i);
+                            positionMot.Add(j);
+                            estPresent = Test_Plateau(mot, posimot++, positionMot);
+                        }
+                    }
+                }
+            }
+            else if (posimot < mot.Length - 1)
+            {
+                for(int i = positionMot[positionMot.Count - 2] - 1; i < positionMot[positionMot.Count - 2] + 1; i++)
+                {
+                    for (int j = positionMot[positionMot.Count - 1] - 1; j < positionMot[positionMot.Count - 2] + 1; j++)
+                    {
+                        if((i >= 0 && i < this.valeurSup.GetLength(0)) && (j >= 0 && j < this.valeurSup.GetLength(1)))
+                        {
+                            bool test = true;
+                            for (int k = 0; k < positionMot.Count - 1; k+=2)
+                            {
+                                if (i == positionMot[k] && j == positionMot[k + 1])
+                                {
+                                    test = false;
+                                }
+                            }
+                            if (test && this.valeurSup[i, j] == Convert.ToString(mot[posimot]))
+                            {
+                                positionMot.Add(i);
+                                positionMot.Add(j);
+                                estPresent = Test_Plateau(mot, posimot++, positionMot);
+                                if (!estPresent)
+                                {
+                                    for (int k = positionMot.Count - 1; k > (2 * posimot) - 1 ; k--)
+                                    {
+                                        positionMot.RemoveAt(k);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                for (int i = positionMot[positionMot.Count - 2] - 1; i < positionMot[positionMot.Count - 2] + 1; i++)
+                {
+                    for (int j = positionMot[positionMot.Count - 1] - 1; j < positionMot[positionMot.Count - 2] + 1; j++)
+                    {
+                        if ((i >= 0 && i < this.valeurSup.GetLength(0)) && (j >= 0 && j < this.valeurSup.GetLength(1)))
+                        {
+                            bool test = true;
+                            for (int k = 0; k < positionMot.Count - 1; k += 2)
+                            {
+                                if (i == positionMot[k] && j == positionMot[k + 1])
+                                {
+                                    test = false;
+                                }
+                            }
+                            if (test && this.valeurSup[i, j] == Convert.ToString(mot[posimot]))
+                            {
+                                positionMot.Add(i);
+                                positionMot.Add(j);
+                                estPresent = true;
+                            }
+                        }
+                    }
+                }
+            }
+            return estPresent;
         }
 
     }

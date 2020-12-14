@@ -14,12 +14,15 @@ namespace Parce_que_c_est_notre_projet
         //Constructeur
         public De(string ligneDe, int nbFaces = 6)
         {
-            bool testFace = true; 
-            this.des = ligneDe.Split(";");
-            if(this.des.Length != nbFaces)
+            bool testFace = true;
+            if (ligneDe != null)
             {
-                testFace = false;
-                Console.WriteLine("Erreur : le nombre de faces est différent de " + nbFaces);
+                this.des = ligneDe.Split(";");
+                if (this.des.Length != nbFaces)
+                {
+                    testFace = false;
+                    Console.WriteLine("Erreur : le nombre de faces est différent de " + nbFaces);
+                }
             }
         }
 
