@@ -94,19 +94,23 @@ namespace Parce_que_c_est_notre_projet
                             positionMot = new List<int>();
                             positionMot.Add(i);
                             positionMot.Add(j);
-                            posimot++;
-                            estPresent = Test_Plateau(mot, posimot, positionMot);
+                            estPresent = Test_Plateau(mot, posimot + 1, positionMot);
+                            if (!estPresent && positionMot.Count > 2)
+                            {
+                                positionMot.RemoveAt(0);
+                                positionMot.RemoveAt(0);
+                            }
                         }
                     }
                 }
             }
             else if (posimot < mot.Length - 1)
             {
-                for(int i = positionMot[positionMot.Count - 2] - 1; i < positionMot[positionMot.Count - 2] + 1; i++)
+                for (int i = positionMot[positionMot.Count - 2] - 1; i <= positionMot[positionMot.Count - 2] + 1; i++)
                 {
-                    for (int j = positionMot[positionMot.Count - 1] - 1; j < positionMot[positionMot.Count - 1] + 1; j++)
+                    for (int j = positionMot[positionMot.Count - 1] - 1; j <= positionMot[positionMot.Count - 1] + 1; j++)
                     {
-                        if((i >= 0 && i < this.valeurSup.GetLength(0)) && (j >= 0 && j < this.valeurSup.GetLength(1)))
+                        if (((i >= 0 && i < this.valeurSup.GetLength(0)) && (j >= 0 && j < this.valeurSup.GetLength(1))) && (i != positionMot[positionMot.Count - 2] || j != positionMot[positionMot.Count - 1]))
                         {
                             bool test = true;
                             for (int k = 0; (k < positionMot.Count - 1 && test); k+=2)
@@ -119,17 +123,8 @@ namespace Parce_que_c_est_notre_projet
                             if (test && this.valeurSup[i, j] == Convert.ToString(mot[posimot]))
                             {
                                 positionMot.Add(i);
-                                positionMot.Add(j);             
-                                posimot++;
-                                estPresent = Test_Plateau(mot, posimot, positionMot);
-                                if (!estPresent)
-                                {
-                                    for (int k = positionMot.Count - 1; k > (2 * posimot) - 1 ; k--)
-                                    {
-                                        positionMot.RemoveAt(k);
-                                        posimot--;
-                                    }
-                                }
+                                positionMot.Add(j);
+                                estPresent = Test_Plateau(mot, posimot + 1, positionMot);
                             }
                         }
                     }
@@ -137,12 +132,13 @@ namespace Parce_que_c_est_notre_projet
             }
             else
             {
-                for (int i = positionMot[positionMot.Count - 2] - 1; i < positionMot[positionMot.Count - 2] + 1; i++)
+                for (int i = positionMot[positionMot.Count - 2] - 1; i <= positionMot[positionMot.Count - 2] + 1 && !estPresent; i++)
                 {
-                    for (int j = positionMot[positionMot.Count - 1] - 1; j < positionMot[positionMot.Count - 1] + 1; j++)
+                    for (int j = positionMot[positionMot.Count - 1] - 1; j <= positionMot[positionMot.Count - 1] + 1 && !estPresent; j++)
                     {
-                        if ((i >= 0 && i < this.valeurSup.GetLength(0)) && (j >= 0 && j < this.valeurSup.GetLength(1)))
+                        if (((i >= 0 && i < this.valeurSup.GetLength(0)) && (j >= 0 && j < this.valeurSup.GetLength(1))) && (i != positionMot[positionMot.Count - 2] || j != positionMot[positionMot.Count - 1]))
                         {
+                            Console.WriteLine(i + ", " + j);
                             bool test = true;
                             for (int k = 0; k < positionMot.Count - 1; k += 2)
                             {
@@ -153,7 +149,7 @@ namespace Parce_que_c_est_notre_projet
                             }
                             if (test && this.valeurSup[i, j] == Convert.ToString(mot[posimot]))
                             {
-                                return true;
+                                estPresent = true;
                             }
                         }
                     }

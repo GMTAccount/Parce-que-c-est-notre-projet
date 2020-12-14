@@ -50,21 +50,33 @@ namespace Parce_que_c_est_notre_projet
                     boogle.Monplateau.Valeurs();
                     Console.WriteLine("C'est au tour de " + tab[i].Nom + " de jouer");
                     Console.WriteLine();
-                    Console.WriteLine(boogle.Monplateau.ToString());
-                    Console.WriteLine();
-                    DateTime finChrono = DateTime.Now + TimeSpan.FromSeconds(30);
+                    DateTime finChrono = DateTime.Now + TimeSpan.FromSeconds(60);
                     while (DateTime.Compare(DateTime.Now, finChrono) < 0)
                     {
+                        Console.WriteLine(boogle.Monplateau.ToString());
+                        Console.WriteLine();
                         Console.WriteLine("Saisissez un nouveau mot trouvé");
                         ConsoleKeyInfo key;
                         string mot = "";
                         do
                         {
                             key = Console.ReadKey();
-                            mot = mot + key.KeyChar;
+                            switch (key.Key)
+                            {
+                                case ConsoleKey.Enter:
+                                    {
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        mot = mot + key.KeyChar;
+                                        break;
+                                    }
+                            }
                         }
                         while (DateTime.Compare(DateTime.Now, finChrono) < 0 && key.Key != ConsoleKey.Enter);
                         mot = mot.ToUpper();
+                        Console.WriteLine(mot);
                         if (mot.Length > 2 && !tab[i].Contain(mot) && boogle.Verification(mot))
                         {
                             tab[i].Add_Mot(mot);
@@ -100,9 +112,14 @@ namespace Parce_que_c_est_notre_projet
                             tab[i].Score = score;
                             Console.WriteLine(tab[i].toString());
                         }
+                        Console.ReadKey();
+                        Console.Clear();
                     }
                 }
             }
+            Console.WriteLine("Et voici les scores à la fin : ");
+            Console.WriteLine();
+            Console.ReadKey();
         }
     }
 }

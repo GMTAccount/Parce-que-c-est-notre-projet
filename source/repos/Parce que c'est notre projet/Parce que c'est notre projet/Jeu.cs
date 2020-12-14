@@ -7,11 +7,6 @@ namespace Parce_que_c_est_notre_projet
 {
     class Jeu
     {
-        /*
-        Reste à faire : 
-        - Finir le Program
-        - Revoir les méthodes récursives
-        */
         private Dictionnaire[] mondico;
         private Plateau monplateau;
 
