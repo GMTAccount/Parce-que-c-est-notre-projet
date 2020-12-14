@@ -69,13 +69,12 @@ namespace Parce_que_c_est_notre_projet
         //Méthodes
         public bool RechercheDichoRecursif(int debut, int fin, string mot)
         {
-            Console.WriteLine("OUI");
             int longueur = mot.Length;
             string[] tableau = this.mots[longueur];
             if (mot != null && mot.Length != 0)
             {
                 if (fin - debut == 2 && tableau[debut + 1] == mot) return true;
-                if (fin - debut == 2 && tableau[debut + 1] != mot) return false;
+                if (fin - debut <= 2 && tableau[debut + 1] != mot) return false;
                 if (tableau[debut] == mot) return true;
                 if (tableau[fin] == mot) return true;
                 switch(Compare(tableau[(debut + fin) / 2], mot))

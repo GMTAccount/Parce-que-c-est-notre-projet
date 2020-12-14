@@ -33,7 +33,8 @@ namespace Parce_que_c_est_notre_projet
         }
         public bool Verification(string mot)
         {
-            return (this.mondico[0].RechercheDichoRecursif(0, this.mondico[0].Mots[mot.Length].Length - 1, mot) && this.monplateau.Test_Plateau(mot, 0));
+            if (mot.Length > 15) return false;
+            return (this.mondico[0].RechercheDichoRecursif(0, this.mondico[0].Mots[mot.Length].Length - 1, mot) && this.monplateau.Test_Plateau(mot, 0)); 
         }
     }
 }

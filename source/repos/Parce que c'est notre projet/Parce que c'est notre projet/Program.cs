@@ -45,9 +45,9 @@ namespace Parce_que_c_est_notre_projet
             DateTime.Compare(DateTime.Now, DateTime.Now + TimeSpan.FromMinutes(5));
             while(DateTime.Compare(DateTime.Now, dateFin) < 0)
             {
-                boogle.Monplateau.Valeurs();
                 for (int i = 0; i < nbJoueurs; i++)
                 {
+                    boogle.Monplateau.Valeurs();
                     Console.WriteLine("C'est au tour de " + tab[i].Nom + " de jouer");
                     Console.WriteLine();
                     Console.WriteLine(boogle.Monplateau.ToString());
@@ -56,7 +56,15 @@ namespace Parce_que_c_est_notre_projet
                     while (DateTime.Compare(DateTime.Now, finChrono) < 0)
                     {
                         Console.WriteLine("Saisissez un nouveau mot trouvé");
-                        string mot = Console.ReadLine();
+                        ConsoleKeyInfo key;
+                        string mot = "";
+                        do
+                        {
+                            key = Console.ReadKey();
+                            mot = mot + key.KeyChar;
+                        }
+                        while (DateTime.Compare(DateTime.Now, finChrono) < 0 && key.Key != ConsoleKey.Enter);
+                        mot = mot.ToUpper();
                         if (mot.Length > 2 && !tab[i].Contain(mot) && boogle.Verification(mot))
                         {
                             tab[i].Add_Mot(mot);
