@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Parce_que_c_est_notre_projet
@@ -40,12 +41,12 @@ namespace Parce_que_c_est_notre_projet
             Joueur[] tab = new Joueur[nbJoueurs];
             tab[0] = new Joueur(1, "Paul");
             tab[1] = new Joueur(2, "Guillaume");
-            duree = 2;
+            duree = 1;
             Console.WriteLine("Début du chronomètre maintenant");
             DateTime dateDebut = DateTime.Now;
-            DateTime dateFin = DateTime.Now + TimeSpan.FromMinutes(duree) + TimeSpan.FromSeconds(duree);
-            DateTime.Compare(DateTime.Now, DateTime.Now + TimeSpan.FromMinutes(5));
-            while(DateTime.Compare(DateTime.Now, dateFin) < 0)
+            //DateTime dateFin = DateTime.Now + TimeSpan.FromMinutes(duree) + TimeSpan.FromSeconds(duree);
+            DateTime dateFin = DateTime.Now + TimeSpan.FromSeconds(40);
+            while (DateTime.Compare(DateTime.Now, dateFin) < 0)
             {
                 for (int i = 0; i < nbJoueurs; i++)
                 {
@@ -54,7 +55,7 @@ namespace Parce_que_c_est_notre_projet
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("C'est au tour de " + tab[i].Nom + " de jouer");
                     Console.WriteLine();
-                    DateTime finChrono = DateTime.Now + TimeSpan.FromSeconds(60);
+                    DateTime finChrono = DateTime.Now + TimeSpan.FromSeconds(20);
                     while (DateTime.Compare(DateTime.Now, finChrono) < 0)
                     {
                         Console.ForegroundColor = ConsoleColor.White;
@@ -101,7 +102,7 @@ namespace Parce_que_c_est_notre_projet
                         while (DateTime.Compare(DateTime.Now, finChrono) < 0 && key.Key != ConsoleKey.Enter);
                         mot = mot.ToUpper();
                         Console.WriteLine(mot);
-                        if (mot.Length > 2) 
+                        if (mot.Length > 2 && DateTime.Compare(DateTime.Now, finChrono) < 0) 
                         {
                             if (!tab[i].Contain(mot))
                             {
@@ -146,13 +147,13 @@ namespace Parce_que_c_est_notre_projet
                                     Console.WriteLine("Ce mot n'existe pas ou n'est pas dans la grille actuelle.");
                                 }
                             }
-                            else
+                            else if (DateTime.Compare(DateTime.Now, finChrono) < 0 && key.Key != ConsoleKey.Enter)
                             {
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("Vous avez déjà trouvé ce mot, on ne peut pas le remettre.");
                             }
                         }
-                        else
+                        else if (DateTime.Compare(DateTime.Now, finChrono) < 0)
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("Le mot saisi est trop court.");
@@ -162,7 +163,20 @@ namespace Parce_que_c_est_notre_projet
                     }
                 }
             }
+            SortedList<int, string> tableauScores = new SortedList<int, string>();
+            for(int i = 0; i < tab.Length; i++)
+            {
+                tableauScores.Add(tab[i].Score, tab[i].Nom);
+            }
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("Et voici les scores à la fin : ");
+            Console.ForegroundColor = ConsoleColor.White;
+            IList<int> scores = tableauScores.Keys;
+            IList<string> noms = tableauScores.Values;
+            for(int i = tableauScores.Count - 1; i >= 0; i--)
+            {
+                Console.WriteLine((tableauScores.Count - i) + " " + noms[i] + " " + scores[i]);
+            }
             Console.WriteLine();
             Console.ReadKey();
         }

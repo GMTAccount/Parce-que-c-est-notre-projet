@@ -8,9 +8,8 @@ namespace Parce_que_c_est_notre_projet
     {
         /*
             Reste à faire : 
-                - Mettre l'affichage final dans le Main
-                - Finaliser la méthode Test_Plateau (erreur au niveau du else/if)
-                - Réfléchir à l'exo 6 (bonus)
+                - Finaliser la méthode Test_Plateau (erreur au niveau du else/if ou de else)
+                - Faire l'exo 6
         */
     }
 }
