@@ -116,7 +116,6 @@ namespace Parce_que_c_est_notre_projet
                     {
                         if (((i >= 0 && i < this.valeurSup.GetLength(0)) && (j >= 0 && j < this.valeurSup.GetLength(1))) && (i != positionMot[positionMot.Count - 2] || j != positionMot[positionMot.Count - 1]))
                         {
-                            Console.WriteLine(i + ", " + j);
                             bool test = true;
                             for (int k = 0; (k < positionMot.Count - 1 && test); k+=2)
                             {

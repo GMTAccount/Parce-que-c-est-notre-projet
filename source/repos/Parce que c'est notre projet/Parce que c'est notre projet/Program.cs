@@ -101,40 +101,61 @@ namespace Parce_que_c_est_notre_projet
                         while (DateTime.Compare(DateTime.Now, finChrono) < 0 && key.Key != ConsoleKey.Enter);
                         mot = mot.ToUpper();
                         Console.WriteLine(mot);
-                        if (mot.Length > 2 && !tab[i].Contain(mot) && boogle.Verification(mot))
+                        if (mot.Length > 2) 
                         {
-                            tab[i].Add_Mot(mot);
-                            int score = 0;
-                            switch (mot.Length)
+                            if (!tab[i].Contain(mot))
                             {
-                                case 3:
+                                if (boogle.Verification(mot))
+                                {
+                                    tab[i].Add_Mot(mot);
+                                    int score = 0;
+                                    switch (mot.Length)
                                     {
-                                        score = 2;
-                                        break;
+                                        case 3:
+                                            {
+                                                score = 2;
+                                                break;
+                                            }
+                                        case 4:
+                                            {
+                                                score = 3;
+                                                break;
+                                            }
+                                        case 5:
+                                            {
+                                                score = 4;
+                                                break;
+                                            }
+                                        case 6:
+                                            {
+                                                score = 5;
+                                                break;
+                                            }
+                                        default:
+                                            {
+                                                score = 11;
+                                                break;
+                                            }
                                     }
-                                case 4:
-                                    {
-                                        score = 3;
-                                        break;
-                                    }
-                                case 5:
-                                    {
-                                        score = 4;
-                                        break;
-                                    }
-                                case 6:
-                                    {
-                                        score = 5;
-                                        break;
-                                    }
-                                default:
-                                    {
-                                        score = 11;
-                                        break;
-                                    }
+                                    tab[i].Score = score;
+                                    Console.WriteLine(tab[i].toString());
+                                }
+                                else
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("Ce mot n'existe pas ou n'est pas dans la grille actuelle.");
+                                }
                             }
-                            tab[i].Score = score;
-                            Console.WriteLine(tab[i].toString());
+                            else
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Vous avez déjà trouvé ce mot, on ne peut pas le remettre.");
+                            }
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Le mot saisi est trop court.");
                         }
                         Console.ReadKey();
                         Console.Clear();
