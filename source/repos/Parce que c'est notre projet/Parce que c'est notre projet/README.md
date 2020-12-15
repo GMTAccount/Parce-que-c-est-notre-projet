@@ -1,4 +1,4 @@
 Reste à faire : 
-- Finaliser le Program (ajout de Delete, affichage final)
-- Finaliser la méthode Test_Plateau
+- Terminer l'affichage final
+- Finaliser la méthode Test_Plateau (au niveau du else if)
 - Réfléchir à l'exo 6 (bonus)

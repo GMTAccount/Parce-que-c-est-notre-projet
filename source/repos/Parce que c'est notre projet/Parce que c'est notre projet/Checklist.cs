@@ -8,8 +8,8 @@ namespace Parce_que_c_est_notre_projet
     {
         /*
             Reste à faire : 
-                - Finaliser le Program (ajout de Delete, affichage final)
-                - Finaliser la méthode Test_Plateau
+                - Mettre l'affichage final dans le Main
+                - Finaliser la méthode Test_Plateau (erreur au niveau du else/if)
                 - Réfléchir à l'exo 6 (bonus)
         */
     }

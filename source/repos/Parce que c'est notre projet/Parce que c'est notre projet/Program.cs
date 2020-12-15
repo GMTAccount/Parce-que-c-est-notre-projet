@@ -7,6 +7,8 @@ namespace Parce_que_c_est_notre_projet
     {
         static void Main(string[] args)
         {
+            Console.Title = "Bienvenue dans Boogle !";
+            Console.ForegroundColor = ConsoleColor.Green;
             string[] fichierDico = { "MotsPossibles.txt" };
             string fichierDes = "Des.txt";
             string langue = "FR";
@@ -47,14 +49,18 @@ namespace Parce_que_c_est_notre_projet
             {
                 for (int i = 0; i < nbJoueurs; i++)
                 {
+                    Console.Title = (tab[i].Nom + " est en train de jouer");
                     boogle.Monplateau.Valeurs();
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("C'est au tour de " + tab[i].Nom + " de jouer");
                     Console.WriteLine();
                     DateTime finChrono = DateTime.Now + TimeSpan.FromSeconds(60);
                     while (DateTime.Compare(DateTime.Now, finChrono) < 0)
                     {
+                        Console.ForegroundColor = ConsoleColor.White;
                         Console.WriteLine(boogle.Monplateau.ToString());
                         Console.WriteLine();
+                        Console.ForegroundColor = ConsoleColor.Magenta;
                         Console.WriteLine("Saisissez un nouveau mot trouvé");
                         ConsoleKeyInfo key;
                         string mot = "";
@@ -65,6 +71,24 @@ namespace Parce_que_c_est_notre_projet
                             {
                                 case ConsoleKey.Enter:
                                     {
+                                        break;
+                                    }
+                                case ConsoleKey.Backspace:
+                                    {
+                                        if(mot.Length > 0)
+                                        {
+                                            string mot1 = "";
+                                            for(int j = 0; j < mot.Length - 1; j++)
+                                            {
+                                                mot1 = mot1 + mot[j];
+                                            }
+                                            mot = mot1;
+                                        }
+                                        break;
+                                    }
+                                case ConsoleKey.Delete:
+                                    {
+                                        mot = "";
                                         break;
                                     }
                                 default:
