@@ -13,7 +13,8 @@ namespace Parce_que_c_est_notre_projet
             string[] fichierDico = { "MotsPossibles.txt" };
             string fichierDes = "Des.txt";
             string langue = "FR";
-            Jeu boogle = new Jeu(fichierDico, fichierDes);
+            //Jeu boogle = new Jeu(fichierDico, fichierDes);
+            Jeu boogle = new Jeu();
             int duree = 0;
             bool test = false;
             int nbJoueurs = 0;
@@ -51,19 +52,21 @@ namespace Parce_que_c_est_notre_projet
                 for (int i = 0; i < nbJoueurs; i++)
                 {
                     Console.Title = (tab[i].Nom + " est en train de jouer");
-                    boogle.Monplateau.Valeurs();
+                    //boogle.Monplateau.Valeurs();
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("C'est au tour de " + tab[i].Nom + " de jouer");
                     Console.WriteLine();
                     DateTime finChrono = DateTime.Now + TimeSpan.FromSeconds(20);
-                    while (DateTime.Compare(DateTime.Now, finChrono) < 0)
+                    ConsoleKeyInfo key = Console.ReadKey();
+                    while (key.Key != ConsoleKey.Spacebar)
+                    //while (DateTime.Compare(DateTime.Now, finChrono) < 0)
                     {
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.WriteLine(boogle.Monplateau.ToString());
                         Console.WriteLine();
                         Console.ForegroundColor = ConsoleColor.Magenta;
                         Console.WriteLine("Saisissez un nouveau mot trouvé");
-                        ConsoleKeyInfo key;
+                        //ConsoleKeyInfo key;
                         string mot = "";
                         do
                         {
@@ -71,15 +74,16 @@ namespace Parce_que_c_est_notre_projet
                             switch (key.Key)
                             {
                                 case ConsoleKey.Enter:
+                                case ConsoleKey.Spacebar:
                                     {
                                         break;
                                     }
                                 case ConsoleKey.Backspace:
                                     {
-                                        if(mot.Length > 0)
+                                        if (mot.Length > 0)
                                         {
                                             string mot1 = "";
-                                            for(int j = 0; j < mot.Length - 1; j++)
+                                            for (int j = 0; j < mot.Length - 1; j++)
                                             {
                                                 mot1 = mot1 + mot[j];
                                             }
@@ -99,11 +103,12 @@ namespace Parce_que_c_est_notre_projet
                                     }
                             }
                         }
-                        while (DateTime.Compare(DateTime.Now, finChrono) < 0 && key.Key != ConsoleKey.Enter);
+                        //while (DateTime.Compare(DateTime.Now, finChrono) < 0 && key.Key != ConsoleKey.Enter);
+                        while (key.Key != ConsoleKey.Enter);
                         mot = mot.ToUpper();
                         Console.WriteLine(mot);
-                        if (mot.Length > 2 && DateTime.Compare(DateTime.Now, finChrono) < 0) 
-                        {
+                        //if (mot.Length > 2 && DateTime.Compare(DateTime.Now, finChrono) < 0) 
+                        //{
                             if (!tab[i].Contain(mot))
                             {
                                 if (boogle.Verification(mot))
@@ -140,24 +145,33 @@ namespace Parce_que_c_est_notre_projet
                                     }
                                     tab[i].Score = score;
                                     Console.WriteLine(tab[i].toString());
+                                    Console.ReadKey();
                                 }
                                 else
                                 {
                                     Console.ForegroundColor = ConsoleColor.Red;
                                     Console.WriteLine("Ce mot n'existe pas ou n'est pas dans la grille actuelle.");
+                                    Console.ReadKey();
                                 }
                             }
                             else if (DateTime.Compare(DateTime.Now, finChrono) < 0 && key.Key != ConsoleKey.Enter)
                             {
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("Vous avez déjà trouvé ce mot, on ne peut pas le remettre.");
+                                Console.ReadKey();
                             }
-                        }
-                        else if (DateTime.Compare(DateTime.Now, finChrono) < 0)
+                        //}
+                        /*else if (DateTime.Compare(DateTime.Now, finChrono) < 0)
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("Le mot saisi est trop court.");
+                            Console.ReadKey();
                         }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Vous avez dépassé le temps règlementaire.");
+                        }*/
                         Console.ReadKey();
                         Console.Clear();
                     }

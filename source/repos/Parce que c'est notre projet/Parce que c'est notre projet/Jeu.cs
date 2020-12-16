@@ -22,6 +22,18 @@ namespace Parce_que_c_est_notre_projet
             this.mondico[0] = new Dictionnaire(new StreamReader(fichierDico[0]), "FR");
             this.monplateau = new Plateau(fichierDes);
         }
+        public Jeu()
+        {
+            this.mondico = new Dictionnaire[1];
+            /*for(int i = 0; i < fichierDico.Length; i++)
+            {
+                Console.WriteLine("Veuillez donner un nom à votre langue : ");
+                this.mondico[i] = new Dictionnaire(new StreamReader(fichierDico[i]), Console.ReadLine());
+
+            }*/
+            this.mondico[0] = new Dictionnaire(new StreamReader("MotsPossibles.txt"), "FR");
+            this.monplateau = new Plateau();
+        }
         public Plateau Monplateau
         {
             get { return this.monplateau; }

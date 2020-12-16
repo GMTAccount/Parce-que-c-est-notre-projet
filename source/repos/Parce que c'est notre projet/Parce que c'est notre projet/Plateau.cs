@@ -45,6 +45,39 @@ namespace Parce_que_c_est_notre_projet
                 }
             }
         }
+        public Plateau()
+        {
+            string filename = "Des.txt";
+            StreamReader fichier = new StreamReader(filename);
+            bool testNbDe = true;
+            try
+            {
+                string ligne = "";
+                do
+                {
+                    ligne = fichier.ReadLine();
+                    this.des.Add(new De(ligne));
+                }
+                while (ligne != null);
+                this.valeurSup = new string[4, 4] { { "J", "L", "R", "T"}, { "A", "Z", "E", "M"}, { "E", "E", "I", "G" }, { "W", "H", "O", "E" } } ;
+            }
+            catch (FileNotFoundException erreur)
+            {
+                Console.WriteLine("Le fichier correspondant n'a pas pu être trouvé");
+                Console.WriteLine(erreur.Message);
+            }
+            catch (Exception erreur)
+            {
+                Console.WriteLine(erreur.Message);
+            }
+            finally
+            {
+                if (fichier != null)
+                {
+                    fichier.Close();
+                }
+            }
+        }
 
 
         //Méthodes
@@ -81,13 +114,13 @@ namespace Parce_que_c_est_notre_projet
 
         public bool Test_Plateau(string mot, int posimot, List<int> positionMot = null)
         {
-            Console.WriteLine(posimot);
+            Console.WriteLine(mot);
             bool estPresent = false;
             if(posimot == 0)
             {
-                for(int i = 0; i < this.valeurSup.GetLength(0); i++)
+                for(int i = 0; i < this.valeurSup.GetLength(0) && !estPresent; i++)
                 {
-                    for (int j = 0; j < this.valeurSup.GetLength(1); j++)
+                    for (int j = 0; j < this.valeurSup.GetLength(1) && !estPresent; j++)
                     {
                         if(this.valeurSup[i,j] == Convert.ToString(mot[0]))
                         {
@@ -95,12 +128,11 @@ namespace Parce_que_c_est_notre_projet
                             positionMot.Add(i);
                             positionMot.Add(j);
                             estPresent = Test_Plateau(mot, posimot + 1, positionMot);
-                            if (!estPresent && positionMot.Count > 2)
+                            if (!estPresent)
                             {
-                                positionMot.RemoveAt(0);
-                                positionMot.RemoveAt(0);
+                                positionMot.RemoveRange(0, positionMot.Count);
                             }
-                            else if (estPresent)
+                            else
                             {
                                 return estPresent;
                             }
@@ -110,31 +142,36 @@ namespace Parce_que_c_est_notre_projet
             }
             else if (posimot < mot.Length - 1)
             {
-                for (int i = positionMot[positionMot.Count - 2] - 1; i <= positionMot[positionMot.Count - 2] + 1; i++)
+                for (int i = positionMot[positionMot.Count - 2] - 1; i <= positionMot[positionMot.Count - 2] + 1 && !estPresent; i++)
                 {
-                    for (int j = positionMot[positionMot.Count - 1] - 1; j <= positionMot[positionMot.Count - 1] + 1; j++)
+                    for (int j = positionMot[positionMot.Count - 1] - 1; j <= positionMot[positionMot.Count - 1] + 1 && !estPresent; j++)
                     {
                         if (((i >= 0 && i < this.valeurSup.GetLength(0)) && (j >= 0 && j < this.valeurSup.GetLength(1))) && (i != positionMot[positionMot.Count - 2] || j != positionMot[positionMot.Count - 1]))
                         {
-                            Console.WriteLine(i + ", " + j);
-                            bool test = true;
-                            for (int k = 0; (k < positionMot.Count - 1 && test); k+=2)
+                            Console.WriteLine(posimot + " : " + i + ", " + j);
+                            if(this.valeurSup[i, j] == Convert.ToString(mot[posimot]))
                             {
-                                if (i == positionMot[k] && j == positionMot[k + 1])
+                                Console.WriteLine("OK pour la position " + i + ", " + j);
+                                bool test = true;
+                                for (int k = 0; (k < positionMot.Count - 1 && test); k += 2)
                                 {
-                                    test = false;
+                                    if (i == positionMot[k] && j == positionMot[k + 1])
+                                    {
+                                        test = false;
+                                    }
                                 }
-                            }
-                            if (test && this.valeurSup[i, j] == Convert.ToString(mot[posimot]))
-                            {
-                                positionMot.Add(i);
-                                positionMot.Add(j);
-                                estPresent = Test_Plateau(mot, posimot + 1, positionMot);
-                            }
-                            if (estPresent)
-                            {
-                                return estPresent;
-                                break;
+                                if (test)
+                                {
+                                    positionMot.Add(i);
+                                    positionMot.Add(j);
+                                    estPresent = Test_Plateau(mot, posimot + 1, positionMot);
+                                    positionMot.RemoveAt(positionMot.Count - 1);
+                                    positionMot.RemoveAt(positionMot.Count - 1);
+                                }
+                                if (estPresent)
+                                {
+                                    return estPresent;
+                                }
                             }
                         }
                     }
@@ -148,7 +185,7 @@ namespace Parce_que_c_est_notre_projet
                     {
                         if (((i >= 0 && i < this.valeurSup.GetLength(0)) && (j >= 0 && j < this.valeurSup.GetLength(1))) && (i != positionMot[positionMot.Count - 2] || j != positionMot[positionMot.Count - 1]))
                         {
-                            Console.WriteLine(i + ", " + j);
+                            Console.WriteLine(posimot + " : " + i + ", " + j);
                             bool test = true;
                             for (int k = 0; k < positionMot.Count - 1; k += 2)
                             {
