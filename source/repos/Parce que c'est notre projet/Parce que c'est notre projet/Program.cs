@@ -13,8 +13,7 @@ namespace Parce_que_c_est_notre_projet
             string[] fichierDico = { "MotsPossibles.txt" };
             string fichierDes = "Des.txt";
             string langue = "FR";
-            //Jeu boogle = new Jeu(fichierDico, fichierDes);
-            Jeu boogle = new Jeu();
+            Jeu boogle = new Jeu(fichierDico, fichierDes);
             int duree = 0;
             bool test = false;
             int nbJoueurs = 0;
@@ -27,8 +26,15 @@ namespace Parce_que_c_est_notre_projet
             Joueur[] tab = new Joueur[nbJoueurs];
             for (int i = 0; i < nbJoueurs; i++)
             {
+                string nomJoueur = "";
                 Console.Clear();
-                tab[i] = new Joueur(i + 1);
+                do
+                {
+                    Console.WriteLine("Veuillez entrer le nom du joueur n°" + i + " :");
+                    nomJoueur = Console.ReadLine().ToUpper();
+                }
+                while (nomJoueur == null && nomJoueur.Length != 0);
+                tab[i] = new Joueur(nomJoueur.ToUpper());
             }
             Console.Clear();
             do
@@ -40,8 +46,8 @@ namespace Parce_que_c_est_notre_projet
             while (!test && duree <= 0);*/
             nbJoueurs = 2;
             Joueur[] tab = new Joueur[nbJoueurs];
-            tab[0] = new Joueur(1, "Paul");
-            tab[1] = new Joueur(2, "Guillaume");
+            tab[0] = new Joueur("Paul");
+            tab[1] = new Joueur("Guillaume");
             duree = 1;
             Console.WriteLine("Début du chronomètre maintenant");
             DateTime dateDebut = DateTime.Now;
@@ -103,12 +109,11 @@ namespace Parce_que_c_est_notre_projet
                                     }
                             }
                         }
-                        //while (DateTime.Compare(DateTime.Now, finChrono) < 0 && key.Key != ConsoleKey.Enter);
-                        while (key.Key != ConsoleKey.Enter);
+                        while (DateTime.Compare(DateTime.Now, finChrono) < 0 && key.Key != ConsoleKey.Enter);
                         mot = mot.ToUpper();
                         Console.WriteLine(mot);
-                        //if (mot.Length > 2 && DateTime.Compare(DateTime.Now, finChrono) < 0) 
-                        //{
+                        if (mot.Length > 2 && DateTime.Compare(DateTime.Now, finChrono) < 0) 
+                        {
                             if (!tab[i].Contain(mot))
                             {
                                 if (boogle.Verification(mot))
@@ -160,8 +165,8 @@ namespace Parce_que_c_est_notre_projet
                                 Console.WriteLine("Vous avez déjà trouvé ce mot, on ne peut pas le remettre.");
                                 Console.ReadKey();
                             }
-                        //}
-                        /*else if (DateTime.Compare(DateTime.Now, finChrono) < 0)
+                        }
+                        else if (DateTime.Compare(DateTime.Now, finChrono) < 0)
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("Le mot saisi est trop court.");
@@ -171,7 +176,7 @@ namespace Parce_que_c_est_notre_projet
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("Vous avez dépassé le temps règlementaire.");
-                        }*/
+                        }
                         Console.ReadKey();
                         Console.Clear();
                     }

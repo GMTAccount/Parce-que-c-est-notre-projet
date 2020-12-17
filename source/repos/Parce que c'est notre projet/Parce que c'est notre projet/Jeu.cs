@@ -21,10 +21,10 @@ namespace Parce_que_c_est_notre_projet
             /*for(int i = 0; i < fichierDico.Length; i++)
             {
                 Console.WriteLine("Veuillez donner un nom à votre langue : ");
-                this.mondico[i] = new Dictionnaire(new StreamReader(fichierDico[i]), Console.ReadLine());
+                this.mondico[i] = new Dictionnaire(fichierDico[i], Console.ReadLine());
 
             }*/
-            this.mondico[0] = new Dictionnaire(new StreamReader(fichierDico[0]), "FR");
+            this.mondico[0] = new Dictionnaire(fichierDico[0], "FR");
             this.monplateau = new Plateau(fichierDes);
         }
         public Jeu()
@@ -36,7 +36,7 @@ namespace Parce_que_c_est_notre_projet
                 this.mondico[i] = new Dictionnaire(new StreamReader(fichierDico[i]), Console.ReadLine());
 
             }*/
-            this.mondico[0] = new Dictionnaire(new StreamReader("MotsPossibles.txt"), "FR");
+            this.mondico[0] = new Dictionnaire("MotsPossibles.txt", "FR");
             this.monplateau = new Plateau();
         }
         /// <summary>
@@ -57,8 +57,7 @@ namespace Parce_que_c_est_notre_projet
         public bool Verification(string mot)
         {
             if (mot.Length > 15) return false;
-            //return (this.mondico[0].RechercheDichoRecursif(0, this.mondico[0].Mots[mot.Length].Length - 1, mot) && this.monplateau.Test_Plateau(mot, 0));
-            return (this.monplateau.Test_Plateau(mot, 0));
+            return (this.mondico[0].RechercheDichoRecursif(0, this.mondico[0].Mots[mot.Length].Length - 1, mot) && this.monplateau.Test_Plateau(mot, 0));
         }
     }
 }

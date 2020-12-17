@@ -16,13 +16,14 @@ namespace Parce_que_c_est_notre_projet
         /// <summary>
         /// Constructeur d'un Dictionnaire
         /// </summary>
-        /// <param name="fichier"></param>
-        /// <param name="langue"></param>
-        public Dictionnaire(StreamReader fichier, string langue)
+        /// <param name="filename">Nom du fichier contenant le dictionnaire</param>
+        /// <param name="langue">Nom de la langue</param>
+        public Dictionnaire(string filename, string langue)
         {
             this.langue = langue;
             bool testFace = true;
             bool testNbDe = true;
+            StreamReader fichier = new StreamReader(filename);
             try
             {
                 string[] ligne = null;
@@ -140,12 +141,15 @@ namespace Parce_que_c_est_notre_projet
         /// </returns>
         public static int Comparaison(string a, string b)
         {
-            int retour = 0; // Valeur de retour, par défaut 0
-            int longueur = b.Length;
-            if (a != b)
+            // Mise en majuscule des mots
+            a = a.ToUpper();
+            b = b.ToUpper();
+            int retour = 0; // Valeur de retour, par défaut 0 (a et b identiques)
+            int longueur = Math.Min(a.Length, b.Length); // Longueur de la plus petite chaîne de caractères, pour la comparaison (et ne pas être out of range)
+            if (a != b) // Si les deux sont différents, alors on les compares, sinon, c'est fini
             {
                 bool fin = true;
-                for (int i = 0; i < longueur && fin; i++)
+                for (int i = 0; i < longueur && fin; i++) // Comparaison caractère à caractère
                 {
                     if (a[i] < b[i])
                     {
@@ -158,10 +162,26 @@ namespace Parce_que_c_est_notre_projet
                         fin = false;
                     }
                 }
+                // Si 2 mots sont identiques jusqu'à avoir parcouru toutes les lettres du plus court, alors l'autre est classé après celui-ci
+                // Par exemple, change sera classé ainsi avant changer
+                if (fin && a.Length != b.Length)
+                {
+                    if(a.Length > b.Length)
+                    {
+                        retour = 1;
+                    }
+                    else
+                    {
+                        retour = -1;
+                    }
+                }
             }
             return retour;
         }
-
+        /// <summary>
+        /// ToString d'un dictionnaire (pour l'affichage du nombre de mots et de la langue)
+        /// </summary>
+        /// <returns>Chaîne de caractères comportant des informations sur le dictionnaire</returns>
         public string toString()
         {
             string s = "La langue du dictionnaire utilisé est le " + this.langue + ", avec :";

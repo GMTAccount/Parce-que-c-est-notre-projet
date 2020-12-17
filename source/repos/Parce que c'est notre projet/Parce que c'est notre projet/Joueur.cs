@@ -13,19 +13,11 @@ namespace Parce_que_c_est_notre_projet
 
 
         //Constructeur
-
-        // Peut-être supprimer le int compt, et faire la saisie dans le Main
-        public Joueur(int compt, string nom)
+        public Joueur(string nom)
         {
             this.score = 0;
             this.motsTrouves = new List<string>();
-            /*do
-            {
-                Console.WriteLine("Veuillez entrer le nom du joueur " + compt + " :");
-                this.nom = Console.ReadLine().ToUpper();
-            }*/
             this.nom = nom;
-            while (this.nom == null && this.nom.Length != 0);
         }
 
 
@@ -73,6 +65,8 @@ namespace Parce_que_c_est_notre_projet
             }
             return test;
         }
+
+
         /// <summary>
         /// Ajout d'un mot dans la liste des mots trouvés par un joueur
         /// </summary>
