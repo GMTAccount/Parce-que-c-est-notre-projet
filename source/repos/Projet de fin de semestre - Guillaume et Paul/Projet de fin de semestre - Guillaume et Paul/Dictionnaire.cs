@@ -70,7 +70,7 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
             get { return this.langue; }
         }
         /// <summary>
-        /// Retour de la liste des mots du dictionnaire
+        /// Retour de la liste triée des mots du dictionnaire
         /// </summary>
 
         public SortedList<int, string[]> Mots
