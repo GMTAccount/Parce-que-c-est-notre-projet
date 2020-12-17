@@ -14,17 +14,19 @@ namespace Parce_que_c_est_notre_projet
         /// Constructeur d'un jeu
         /// </summary>
         /// <param name="fichierDico">Noms des fichiers de dictionnaire (dans la langue souhaitée)</param>
+        /// <param name="nomLangues">Noms des langues correspondant aux dictionnaires</param>
         /// <param name="fichierDes">Nom du fichier avec les dés</param>
-        public Jeu(string[] fichierDico, string fichierDes)
+        public Jeu(string[] fichierDico, string[] nomLangues, string fichierDes)
         {
             this.mondico = new Dictionnaire[fichierDico.Length];
-            /*for(int i = 0; i < fichierDico.Length; i++)
+            if (fichierDico != null && fichierDico.Length != 0 && nomLangues != null && nomLangues.Length != 0 && fichierDico.Length == nomLangues.Length)
             {
-                Console.WriteLine("Veuillez donner un nom à votre langue : ");
-                this.mondico[i] = new Dictionnaire(fichierDico[i], Console.ReadLine());
+                for (int i = 0; i < fichierDico.Length; i++)
+                {
+                    this.mondico[i] = new Dictionnaire(fichierDico[i], nomLangues[i]);
 
-            }*/
-            this.mondico[0] = new Dictionnaire(fichierDico[0], "FR");
+                }
+            }
             this.monplateau = new Plateau(fichierDes);
         }
         /// <summary>
@@ -35,17 +37,25 @@ namespace Parce_que_c_est_notre_projet
             get { return this.monplateau; }
         }
         /// <summary>
+        /// Retour du dictionnaire (pour l'IA)
+        /// </summary>
+        public Dictionnaire[] Mondico
+        {
+            get { return this.mondico; }
+        }
+        /// <summary>
         /// Vérification d'un mot
         /// - Appartenance au dictionnaire
         /// - Test de voisinage
         /// Ici, on ne fait qu'appeler les méthodes correspondantes, et afficher une erreur dans le cas où un des tests échouerai
         /// </summary>
         /// <param name="mot">Mot à analyser</param>
+        /// <param name="choixLangue">Langue choisie pour le dictionnaire</param>
         /// <returns>Booléen : true = mot valide, false = mot invalide (non existant ou contrainte d'adjacence)</returns>
-        public bool Verification(string mot)
+        public bool Verification(string mot, int choixLangue)
         {
             if (mot.Length > 15) return false;
-            return (this.mondico[0].RechercheDichoRecursif(0, this.mondico[0].Mots[mot.Length].Length - 1, mot) && this.monplateau.Test_Plateau(mot, 0));
+            return (this.mondico[choixLangue].RechercheDichoRecursif(0, this.mondico[choixLangue].Mots[mot.Length].Length - 1, mot) && this.monplateau.Test_Plateau(mot, 0));
         }
     }
 }

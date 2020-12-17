@@ -12,6 +12,11 @@ namespace Parce_que_c_est_notre_projet
 
 
         //Constructeur
+        /// <summary>
+        /// Constructeur d'un dé
+        /// </summary>
+        /// <param name="ligneDe">Ligne caractérisant un dé</param>
+        /// <param name="nbFaces">Nombre de faces du dé</param>
         public De(string ligneDe, int nbFaces = 6)
         {
             bool testFace = true;

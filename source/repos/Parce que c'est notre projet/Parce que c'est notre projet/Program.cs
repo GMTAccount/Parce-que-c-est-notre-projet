@@ -8,71 +8,281 @@ namespace Parce_que_c_est_notre_projet
     {
         static void Main(string[] args)
         {
-            /*Console.Title = "Bienvenue dans Boogle !";
+            Console.Title = "Bienvenue dans Boogle !";
             Console.ForegroundColor = ConsoleColor.Green;
             string[] fichierDico = { "MotsPossibles.txt" };
+            string[] nomLangues = { "Français" };
             string fichierDes = "Des.txt";
-            string langue = "FR";
-            Jeu boogle = new Jeu(fichierDico, fichierDes);
             int duree = 0;
             bool test = false;
             int nbJoueurs = 0;
-            /*do
+            int langueJeu = 0;
+            do
+            {
+                Console.WriteLine("Veuillez choisir une langue :");
+                for(int i = 0; i < nomLangues.Length; i++)
+                {
+                    Console.WriteLine((i + 1) + " - " + nomLangues[i]);
+                }
+                Console.WriteLine("(Entrez le numéro correspondant à votre choix)");
+                test = int.TryParse(Console.ReadLine(), out langueJeu);
+                langueJeu--;
+            }
+            while (!test && (langueJeu < 0 || langueJeu >= nomLangues.Length));
+            do
             {
                 Console.WriteLine("Combien de joueurs autour de la table ?");
+                Console.WriteLine("(Pour jouer contre notre invincible IA, tapez 1)");
                 test = int.TryParse(Console.ReadLine(), out nbJoueurs);
             }
             while (!test && nbJoueurs <= 0);
-            Joueur[] tab = new Joueur[nbJoueurs];
-            for (int i = 0; i < nbJoueurs; i++)
+            Jeu boogle = new Jeu(fichierDico, nomLangues, fichierDes);
+            if (nbJoueurs > 1) 
+            {
+                Joueur[] tab = new Joueur[nbJoueurs];
+                for (int i = 0; i < nbJoueurs; i++)
+                {
+                    string nomJoueur = "";
+                    Console.Clear();
+                    do
+                    {
+                        Console.WriteLine("Veuillez entrer le nom du joueur n°" + (i + 1) + " :");
+                        nomJoueur = Console.ReadLine().ToUpper();
+                    }
+                    while (nomJoueur == null && nomJoueur.Length != 0);
+                    tab[i] = new Joueur(nomJoueur.ToUpper());
+                }
+                Console.Clear();
+                do
+                {
+                    Console.WriteLine("Combien de fois voulez-vous jouer chacun ?");
+                    test = int.TryParse(Console.ReadLine(), out duree);
+                }
+                while (!test && duree <= 0);
+                duree = duree * nbJoueurs;
+                Console.Title = "Attention, le jeu va commmencer !!!";
+                Console.WriteLine("Pour lancer le chronomètre, appuyez sur Enter");
+                ConsoleKeyInfo keyInfo = new ConsoleKeyInfo();
+                do
+                {
+                    keyInfo = Console.ReadKey();
+                }
+                while (keyInfo.Key != ConsoleKey.Enter);
+                Console.Clear();
+                DateTime dateDebut = DateTime.Now;
+                DateTime dateFin = DateTime.Now + TimeSpan.FromMinutes(duree) + TimeSpan.FromSeconds(duree);
+                while (DateTime.Compare(DateTime.Now, dateFin) < 0)
+                {
+                    for (int i = 0; i < nbJoueurs; i++)
+                    {
+                        Console.Title = (tab[i].Nom + " est en train de jouer");
+                        boogle.Monplateau.MelangeValeurs();
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("C'est au tour de " + tab[i].Nom + " de jouer");
+                        Console.WriteLine();
+                        DateTime finChrono = DateTime.Now + TimeSpan.FromSeconds(60);
+                        while (DateTime.Compare(DateTime.Now, finChrono) < 0)
+                        {
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.WriteLine(boogle.Monplateau.ToString());
+                            Console.WriteLine();
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            Console.WriteLine("Saisissez un nouveau mot trouvé");
+                            ConsoleKeyInfo key;
+                            string mot = "";
+                            do
+                            {
+                                key = Console.ReadKey();
+                                switch (key.Key)
+                                {
+                                    case ConsoleKey.Enter:
+                                    case ConsoleKey.Spacebar:
+                                        {
+                                            break;
+                                        }
+                                    case ConsoleKey.Backspace:
+                                        {
+                                            if (mot.Length > 0)
+                                            {
+                                                string mot1 = "";
+                                                for (int j = 0; j < mot.Length - 1; j++)
+                                                {
+                                                    mot1 = mot1 + mot[j];
+                                                }
+                                                mot = mot1;
+                                            }
+                                            break;
+                                        }
+                                    case ConsoleKey.Delete:
+                                        {
+                                            mot = "";
+                                            break;
+                                        }
+                                    default:
+                                        {
+                                            mot = mot + key.KeyChar;
+                                            break;
+                                        }
+                                }
+                            }
+                            while (DateTime.Compare(DateTime.Now, finChrono) < 0 && key.Key != ConsoleKey.Enter);
+                            mot = mot.ToUpper();
+                            Console.WriteLine(mot);
+                            if (mot.Length > 2 && DateTime.Compare(DateTime.Now, finChrono) < 0)
+                            {
+                                if (!tab[i].Contain(mot))
+                                {
+                                    if (boogle.Verification(mot, langueJeu))
+                                    {
+                                        tab[i].Add_Mot(mot);
+                                        int score = 0;
+                                        switch (mot.Length)
+                                        {
+                                            case 3:
+                                                {
+                                                    score = 2;
+                                                    break;
+                                                }
+                                            case 4:
+                                                {
+                                                    score = 3;
+                                                    break;
+                                                }
+                                            case 5:
+                                                {
+                                                    score = 4;
+                                                    break;
+                                                }
+                                            case 6:
+                                                {
+                                                    score = 5;
+                                                    break;
+                                                }
+                                            default:
+                                                {
+                                                    score = 11;
+                                                    break;
+                                                }
+                                        }
+                                        tab[i].Score = score;
+                                        Console.WriteLine(tab[i].toString());
+                                        Console.ReadKey();
+                                    }
+                                    else
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.Red;
+                                        Console.WriteLine("Ce mot n'existe pas ou n'est pas dans la grille actuelle.");
+                                        Console.ReadKey();
+                                    }
+                                }
+                                else if (DateTime.Compare(DateTime.Now, finChrono) < 0 && key.Key != ConsoleKey.Enter)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("Vous avez déjà trouvé ce mot, on ne peut pas le remettre.");
+                                    Console.ReadKey();
+                                }
+                            }
+                            else if (DateTime.Compare(DateTime.Now, finChrono) < 0)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Le mot saisi est trop court.");
+                                Console.ReadKey();
+                            }
+                            else
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Vous avez dépassé le temps règlementaire.");
+                            }
+                            Console.Clear();
+                        }
+                        tab[i].ClearAllList();
+                    }
+                }
+                SortedList<int, string> tableauScores = new SortedList<int, string>();
+                for (int i = 0; i < tab.Length; i++)
+                {
+                    tableauScores.Add(tab[i].Score, tab[i].Nom);
+                }
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Et voici les scores à la fin : ");
+                Console.ForegroundColor = ConsoleColor.White;
+                IList<int> scores = tableauScores.Keys;
+                IList<string> noms = tableauScores.Values;
+                for (int i = tableauScores.Count - 1; i >= 0; i--)
+                {
+                    Console.WriteLine((tableauScores.Count - i) + " " + noms[i] + " " + scores[i]);
+                }
+            }
+            else
             {
                 string nomJoueur = "";
                 Console.Clear();
                 do
                 {
-                    Console.WriteLine("Veuillez entrer le nom du joueur n°" + i + " :");
+                    Console.WriteLine("Veuillez entrer votre nom :");
                     nomJoueur = Console.ReadLine().ToUpper();
                 }
                 while (nomJoueur == null && nomJoueur.Length != 0);
-                tab[i] = new Joueur(nomJoueur.ToUpper());
-            }
-            Console.Clear();
-            do
-            {
-                Console.WriteLine("Combien de fois voulez-vous jouer chacun ?");
-                test = int.TryParse(Console.ReadLine(), out duree);
-                duree = duree * nbJoueurs;
-            }
-            while (!test && duree <= 0);
-            nbJoueurs = 2;
-            Joueur[] tab = new Joueur[nbJoueurs];
-            tab[0] = new Joueur("Paul");
-            tab[1] = new Joueur("Guillaume");
-            duree = 1;
-            Console.WriteLine("Début du chronomètre maintenant");
-            DateTime dateDebut = DateTime.Now;
-            //DateTime dateFin = DateTime.Now + TimeSpan.FromMinutes(duree) + TimeSpan.FromSeconds(duree);
-            DateTime dateFin = DateTime.Now + TimeSpan.FromSeconds(40);
-            while (DateTime.Compare(DateTime.Now, dateFin) < 0)
-            {
-                for (int i = 0; i < nbJoueurs; i++)
+                Joueur joueur = new Joueur(nomJoueur.ToUpper());
+                Console.Clear();
+                do
                 {
-                    Console.Title = (tab[i].Nom + " est en train de jouer");
-                    //boogle.Monplateau.Valeurs();
+                    Console.WriteLine("Combien de fois voulez-vous affronter notre terrible IA ?");
+                    test = int.TryParse(Console.ReadLine(), out duree);
+                }
+                while (!test && duree <= 0);
+                Console.Clear();
+                int choix = 0;
+                do
+                {
+                    Console.WriteLine("Pour notre IA, souhaitez-vous qu'elle soit" +
+                        "\n1 - Un peu imbattable" +
+                        "\n2 - Invincible sans plus" +
+                        "\n3 - ELLE VA TOUT DÉTRIURE" +
+                        "\nVeuillez saisir le chiffre correspondant" +
+                        "\n(PS : cherchez pas, vous allez perdre, y a pas d'autres issues. MOUHAHAHAHA");
+                    test = int.TryParse(Console.ReadLine(), out choix);
+                }
+                while (!test && (choix <= 0 || choix > 3));
+                int[] intervalleValeursIA = null;
+                switch (choix)
+                {
+                    case 1:
+                        {
+                            intervalleValeursIA = new int[] { 3, 6};
+                            break;
+                        }
+                    case 2:
+                        {
+                            intervalleValeursIA = new int[] { 4, 8 };
+                            break;
+                        }
+                    default:
+                        {
+                            intervalleValeursIA = new int[] { 5, 10 };
+                            break;
+                        }
+                }
+                IA winner = new IA(boogle, langueJeu);
+                Console.Clear();
+                DateTime dateDebut = DateTime.Now;
+                DateTime dateFin = DateTime.Now + TimeSpan.FromMinutes(duree) + TimeSpan.FromSeconds(duree);
+                while (DateTime.Compare(DateTime.Now, dateFin) < 0)
+                {
+                    Console.Title = (joueur.Nom + " est en train de sauver son honneur face à notre formidable IA");
+                    boogle.Monplateau.MelangeValeurs();
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("C'est au tour de " + tab[i].Nom + " de jouer");
+                    Console.WriteLine("C'est à votre tour de jouer");
                     Console.WriteLine();
-                    DateTime finChrono = DateTime.Now + TimeSpan.FromSeconds(20);
-                    ConsoleKeyInfo key = Console.ReadKey();
-                    while (key.Key != ConsoleKey.Spacebar)
-                    //while (DateTime.Compare(DateTime.Now, finChrono) < 0)
+                    DateTime finChrono = DateTime.Now + TimeSpan.FromSeconds(60);
+                    while (DateTime.Compare(DateTime.Now, finChrono) < 0)
                     {
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.WriteLine(boogle.Monplateau.ToString());
                         Console.WriteLine();
                         Console.ForegroundColor = ConsoleColor.Magenta;
                         Console.WriteLine("Saisissez un nouveau mot trouvé");
-                        //ConsoleKeyInfo key;
+                        ConsoleKeyInfo key;
                         string mot = "";
                         do
                         {
@@ -112,13 +322,13 @@ namespace Parce_que_c_est_notre_projet
                         while (DateTime.Compare(DateTime.Now, finChrono) < 0 && key.Key != ConsoleKey.Enter);
                         mot = mot.ToUpper();
                         Console.WriteLine(mot);
-                        if (mot.Length > 2 && DateTime.Compare(DateTime.Now, finChrono) < 0) 
+                        if (mot.Length > 2 && DateTime.Compare(DateTime.Now, finChrono) < 0)
                         {
-                            if (!tab[i].Contain(mot))
+                            if (!joueur.Contain(mot))
                             {
-                                if (boogle.Verification(mot))
+                                if (boogle.Verification(mot, langueJeu))
                                 {
-                                    tab[i].Add_Mot(mot);
+                                    joueur.Add_Mot(mot);
                                     int score = 0;
                                     switch (mot.Length)
                                     {
@@ -148,8 +358,8 @@ namespace Parce_que_c_est_notre_projet
                                                 break;
                                             }
                                     }
-                                    tab[i].Score = score;
-                                    Console.WriteLine(tab[i].toString());
+                                    joueur.Score = score;
+                                    Console.WriteLine(joueur.toString());
                                     Console.ReadKey();
                                 }
                                 else
@@ -177,33 +387,34 @@ namespace Parce_que_c_est_notre_projet
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("Vous avez dépassé le temps règlementaire.");
                         }
-                        Console.ReadKey();
                         Console.Clear();
+                        joueur.ClearAllList(); 
                     }
-                }
-            }
-            SortedList<int, string> tableauScores = new SortedList<int, string>();
-            for(int i = 0; i < tab.Length; i++)
-            {
-                tableauScores.Add(tab[i].Score, tab[i].Nom);
-            }
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("Et voici les scores à la fin : ");
-            Console.ForegroundColor = ConsoleColor.White;
-            IList<int> scores = tableauScores.Keys;
-            IList<string> noms = tableauScores.Values;
-            for(int i = tableauScores.Count - 1; i >= 0; i--)
-            {
-                Console.WriteLine((tableauScores.Count - i) + " " + noms[i] + " " + scores[i]);
-            }
-            Console.WriteLine();
-            Console.ReadKey();*/
-            Console.Title = "Bienvenue dans le crash du siècle (pire que Wall Street) !";
-            Dictionnaire[] dico = new Dictionnaire[1];
-            dico[0] = new Dictionnaire("MotsPossibles.txt", "FR");
-            IA ia = new IA(dico, 0);
-            ia.RechercheMots();
+                    boogle.Monplateau.MelangeValeurs();
+                    winner.RechercheMots();
+                    Random r = new Random();
+                    int nbMots = r.Next(intervalleValeursIA[0], intervalleValeursIA[1] + 1);
+                    for(int i = 0; i < nbMots; i++)
+                    {
+                        winner.DistributionMots();
+                    }
 
+
+                    SortedList<int, string> tableauScores = new SortedList<int, string>();
+                    for (int i = 0; i < tab.Length; i++)
+                    {
+                        tableauScores.Add(tab[i].Score, tab[i].Nom);
+                    }
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Et voici les scores à la fin : ");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    IList<int> scores = tableauScores.Keys;
+                    IList<string> noms = tableauScores.Values;
+                    for (int i = tableauScores.Count - 1; i >= 0; i--)
+                    {
+                        Console.WriteLine((tableauScores.Count - i) + " " + noms[i] + " " + scores[i]);
+                    }
+            }
         }
     }
 }

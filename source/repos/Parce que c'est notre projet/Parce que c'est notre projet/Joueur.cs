@@ -13,6 +13,10 @@ namespace Parce_que_c_est_notre_projet
 
 
         //Constructeur
+        /// <summary>
+        /// Constructeur d'un joueur
+        /// </summary>
+        /// <param name="nom">Nom du joueur</param>
         public Joueur(string nom)
         {
             this.score = 0;
@@ -94,6 +98,16 @@ namespace Parce_que_c_est_notre_projet
                 }
             }
             return text;
+        }
+        /// <summary>
+        /// Suppression de tous les mots trouvés par un joueur au cours d'une partie
+        /// </summary>
+        public void ClearAllList()
+        {
+            if(this.motsTrouves.Count != 0 && this.motsTrouves != null)
+            {
+                this.motsTrouves.RemoveRange(0, this.motsTrouves.Count);
+            }
         }
     }
 }
