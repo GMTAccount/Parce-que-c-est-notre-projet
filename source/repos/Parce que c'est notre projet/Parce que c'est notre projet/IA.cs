@@ -21,6 +21,7 @@ namespace Parce_que_c_est_notre_projet
         {
             this.dictionnaire = new List<string>();
             this.motsTrouves = new List<string>();
+            this.motsDejaDonnes = new List<string>();
             this.score = 0;
             for (int i = 3; i < 16; i++)
             {
@@ -52,14 +53,12 @@ namespace Parce_que_c_est_notre_projet
         /// <summary>
         /// Recherche de TOUS les mots du dictionnaire dans la grille actuelle
         /// </summary>
-        public void RechercheMots()
+        /// <param name="plateauActuel">Plateau de jeu dans lequel l'IA doit trouver les mots</param>
+        public void RechercheMots(Plateau plateauActuel)
         {
-            Console.WriteLine(this.dictionnaire.Count);
-            Console.WriteLine(this.jeu.Monplateau.ToString());
-            Console.WriteLine();
             for (int i = 0; i < this.dictionnaire.Count; i++)
             {
-                if(this.jeu.Monplateau.Test_Plateau(this.dictionnaire[i], 0))
+                if(plateauActuel.Test_Plateau(this.dictionnaire[i], 0))
                 {
                     this.motsTrouves.Add(this.dictionnaire[i]);
                 }
@@ -101,8 +100,14 @@ namespace Parce_que_c_est_notre_projet
         /// <returns>Chaîne de caractères comportant le nombre de points et les mots trouvés</returns>
         public string ToString()
         {
-            string retour = "Notre superbe IA a actuellement ";
-
+            string retour = "Notre superbe IA a actuellement " + this.score + " points, grâce à :";
+            if (this.motsDejaDonnes != null && this.motsDejaDonnes.Count != 0)
+            {
+                foreach (string y in this.motsDejaDonnes)
+                {
+                    retour = retour + y + " ";
+                }
+            }
             return retour;
         }
     }

@@ -8,7 +8,7 @@ namespace Parce_que_c_est_notre_projet
     {
         static void Main(string[] args)
         {
-            Console.Title = "Bienvenue dans Boogle !";
+            Console.Title = "Bienvenue dans Boggle !";
             Console.ForegroundColor = ConsoleColor.Green;
             string[] fichierDico = { "MotsPossibles.txt" };
             string[] nomLangues = { "Français" };
@@ -70,7 +70,7 @@ namespace Parce_que_c_est_notre_projet
                 while (keyInfo.Key != ConsoleKey.Enter);
                 Console.Clear();
                 DateTime dateDebut = DateTime.Now;
-                DateTime dateFin = DateTime.Now + TimeSpan.FromMinutes(duree) + TimeSpan.FromSeconds(duree);
+                DateTime dateFin = DateTime.Now + TimeSpan.FromSeconds(30);
                 while (DateTime.Compare(DateTime.Now, dateFin) < 0)
                 {
                     for (int i = 0; i < nbJoueurs; i++)
@@ -80,7 +80,7 @@ namespace Parce_que_c_est_notre_projet
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("C'est au tour de " + tab[i].Nom + " de jouer");
                         Console.WriteLine();
-                        DateTime finChrono = DateTime.Now + TimeSpan.FromSeconds(60);
+                        DateTime finChrono = DateTime.Now + TimeSpan.FromSeconds(6);
                         while (DateTime.Compare(DateTime.Now, finChrono) < 0)
                         {
                             Console.ForegroundColor = ConsoleColor.White;
@@ -201,8 +201,16 @@ namespace Parce_que_c_est_notre_projet
                 SortedList<int, string> tableauScores = new SortedList<int, string>();
                 for (int i = 0; i < tab.Length; i++)
                 {
-                    tableauScores.Add(tab[i].Score, tab[i].Nom);
+                    if (tableauScores.Count != 0 && tableauScores.ContainsKey(tab[i].Score))
+                    {
+                        tableauScores[tab[i].Score] = tableauScores[tab[i].Score] + ", " + tab[i].Nom;
+                    }
+                    else
+                    {
+                        tableauScores[tab[i].Score] = tab[i].Nom;
+                    }
                 }
+                Console.Title = "Le moment fatidique des scores est enfin là !";
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("Et voici les scores à la fin : ");
                 Console.ForegroundColor = ConsoleColor.White;
@@ -240,7 +248,7 @@ namespace Parce_que_c_est_notre_projet
                         "\n2 - Invincible sans plus" +
                         "\n3 - ELLE VA TOUT DÉTRIURE" +
                         "\nVeuillez saisir le chiffre correspondant" +
-                        "\n(PS : cherchez pas, vous allez perdre, y a pas d'autres issues. MOUHAHAHAHA");
+                        "\n(PS : cherchez pas, vous allez perdre, y a pas d'autres issues. MOUHAHAHAHA)");
                     test = int.TryParse(Console.ReadLine(), out choix);
                 }
                 while (!test && (choix <= 0 || choix > 3));
@@ -266,7 +274,7 @@ namespace Parce_que_c_est_notre_projet
                 IA winner = new IA(boogle, langueJeu);
                 Console.Clear();
                 DateTime dateDebut = DateTime.Now;
-                DateTime dateFin = DateTime.Now + TimeSpan.FromMinutes(duree) + TimeSpan.FromSeconds(duree);
+                DateTime dateFin = DateTime.Now + TimeSpan.FromMinutes(duree);
                 while (DateTime.Compare(DateTime.Now, dateFin) < 0)
                 {
                     Console.Title = (joueur.Nom + " est en train de sauver son honneur face à notre formidable IA");
@@ -388,32 +396,73 @@ namespace Parce_que_c_est_notre_projet
                             Console.WriteLine("Vous avez dépassé le temps règlementaire.");
                         }
                         Console.Clear();
-                        joueur.ClearAllList(); 
+                        joueur.ClearAllList();
                     }
                     boogle.Monplateau.MelangeValeurs();
-                    winner.RechercheMots();
+                    Console.WriteLine(boogle.Monplateau.ToString());
+                    winner.RechercheMots(boogle.Monplateau);
                     Random r = new Random();
                     int nbMots = r.Next(intervalleValeursIA[0], intervalleValeursIA[1] + 1);
-                    for(int i = 0; i < nbMots; i++)
+                    for (int i = 0; i < nbMots; i++)
                     {
-                        winner.DistributionMots();
+                        string motIA = winner.DistributionMots();
+                        int score = 0;
+                        if (motIA != "" && motIA != null && motIA.Length > 0)
+                        {
+                            switch (motIA.Length)
+                            {
+                                case 3:
+                                    {
+                                        score = 2;
+                                        break;
+                                    }
+                                case 4:
+                                    {
+                                        score = 3;
+                                        break;
+                                    }
+                                case 5:
+                                    {
+                                        score = 4;
+                                        break;
+                                    }
+                                case 6:
+                                    {
+                                        score = 5;
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        score = 11;
+                                        break;
+                                    }
+                            }
+                            winner.Score = score;
+                        }
                     }
+                    Console.WriteLine(winner.ToString());
+                    winner.ClearAllLists();
+                }
+                Console.Title = "Le moment fatidique des scores est enfin là !";
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Et le grand gagnant est ...");
+                Console.ForegroundColor = ConsoleColor.White;
+                if (joueur.Score > winner.Score)
+                {
+                    Console.WriteLine("VOUS, avec vos magnifiques " + joueur.Score + " points !");
+                    Console.WriteLine("On ne sais pas comment vous avez fait, mais vous avez terminé l'IA et ses " + winner.Score + " points.");
+                    Console.WriteLine("Félicitations !");
+                }
+                else if (joueur.Score < winner.Score)
+                {
+                    Console.WriteLine("C'est pas pour rien que son nom de variable est 'winner' !");
+                    Console.WriteLine("L'IA vous a vaincu avec ses " + winner.Score + " points.");
+                    Console.WriteLine("Normal qu'avec vos " + joueur.Score + " points, vous n'ayez rien pu faire !");
+                }
+                else
+                {
 
-
-                    SortedList<int, string> tableauScores = new SortedList<int, string>();
-                    for (int i = 0; i < tab.Length; i++)
-                    {
-                        tableauScores.Add(tab[i].Score, tab[i].Nom);
-                    }
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("Et voici les scores à la fin : ");
-                    Console.ForegroundColor = ConsoleColor.White;
-                    IList<int> scores = tableauScores.Keys;
-                    IList<string> noms = tableauScores.Values;
-                    for (int i = tableauScores.Count - 1; i >= 0; i--)
-                    {
-                        Console.WriteLine((tableauScores.Count - i) + " " + noms[i] + " " + scores[i]);
-                    }
+                }
             }
         }
     }
