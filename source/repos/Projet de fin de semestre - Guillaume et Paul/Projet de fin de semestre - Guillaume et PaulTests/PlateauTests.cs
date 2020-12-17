@@ -13,7 +13,7 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul.Tests
         public void PlateauTest()
         {
             string[,] matrice = { { "J", "L", "R", "T" }, { "A", "Z", "E", "M" }, { "E", "E", "I", "G" }, { "W", "H", "O", "E" } };
-            Plateau nouveau = new Plateau("De.cs", matrice);
+            Plateau nouveau = new Plateau("Des.txt", matrice);
             Assert.IsNotNull(nouveau);
         }
 
@@ -21,7 +21,7 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul.Tests
         public void ToStringTest()
         {
             string[,] matrice = { { "J", "L", "R", "T" }, { "A", "Z", "E", "M" }, { "E", "E", "I", "G" }, { "W", "H", "O", "E" } };
-            Plateau nouveau = new Plateau("De.cs", matrice);
+            Plateau nouveau = new Plateau("Des.txt", matrice);
             Assert.AreEqual("J L R T \nA Z E M \nE E I G \nW H O E \n", nouveau.ToString());
         }
 
@@ -29,7 +29,7 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul.Tests
         public void Test_PlateauTest()
         {
             string[,] matrice = { { "J", "L", "R", "T" }, { "A", "Z", "E", "M" }, { "E", "E", "I", "G" }, { "W", "H", "O", "E" } };
-            Plateau nouveau = new Plateau("De.cs", matrice);
+            Plateau nouveau = new Plateau("Des.txt", matrice);
             bool test = nouveau.Test_Plateau("ZIEEM", 0);
             Assert.AreEqual(true, test);
         }
