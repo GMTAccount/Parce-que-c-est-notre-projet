@@ -28,6 +28,9 @@ namespace Parce_que_c_est_notre_projet
 
 
         //Propriété
+        /// <summary>
+        /// Retour du tableau de chaînes de caractères correspondant à un dé
+        /// </summary>
         public string[]Des
         {
             get { return this.des; }
@@ -35,12 +38,20 @@ namespace Parce_que_c_est_notre_projet
 
 
         //Méthodes 
+        /// <summary>
+        /// Lancer d'un dé
+        /// </summary>
+        /// <param name="r">Générateur aléatoire</param>
+        /// <returns>Valeur du dé sur la face correspondante (choisie aléatoirement)</returns>
         public string Lance(Random r)
         {
-            int position = r.Next(0, this.des.Length);
+            int position = r.Next(0, this.des.Length); // Génération d'un entier aléatoire (intervalle de valeurs possibles borné)
             return this.des[position];
         }
-
+        /// <summary>
+        /// ToString d'un dé
+        /// </summary>
+        /// <returns>Chaîne de caractères comportant les caractéristiques d'un dé (toutes les valeurs possibles)</returns>
         public string toString()
         {
             string retour = "";

@@ -13,6 +13,11 @@ namespace Parce_que_c_est_notre_projet
 
 
         //Constructeur
+        /// <summary>
+        /// Constructeur d'un Dictionnaire
+        /// </summary>
+        /// <param name="fichier"></param>
+        /// <param name="langue"></param>
         public Dictionnaire(StreamReader fichier, string langue)
         {
             this.langue = langue;
@@ -56,10 +61,16 @@ namespace Parce_que_c_est_notre_projet
 
 
         //Propriétés
+        /// <summary>
+        /// Retour du nom de langue
+        /// </summary>
         public string Langue
         {
             get { return this.langue; }
         }
+        /// <summary>
+        /// Retour de la liste des mots du dictionnaire
+        /// </summary>
 
         public SortedList<int, string[]> Mots
         {
@@ -67,31 +78,43 @@ namespace Parce_que_c_est_notre_projet
         }
 
         //Méthodes
+        /// <summary>
+        /// Recherche d'un mot dans le dictionnaire.
+        /// Cette méthode se base sur une recherche dichotomique, et est récursive.
+        /// </summary>
+        /// <param name="debut">Rang de début de recherche actuelle</param>
+        /// <param name="fin">Rang de fin de recherche actuelle</param>
+        /// <param name="mot">Mot à analyser</param>
+        /// <returns>Booléen : true = mot valide (dans le dictionnaire), false sinon</returns>
         public bool RechercheDichoRecursif(int debut, int fin, string mot)
         {
             int longueur = mot.Length;
-            string[] tableau = this.mots[longueur];
-            if (mot != null && mot.Length != 0)
+            if (mot != null && mot.Length != 0) // Le mot doit comporter au moins 1 caractère pour être recherché
             {
-                if (fin - debut == 2 && tableau[debut + 1] == mot) return true;
-                if (fin - debut <= 2 && tableau[debut + 1] != mot) return false;
-                if (tableau[debut] == mot) return true;
-                if (tableau[fin] == mot) return true;
-                switch(Compare(tableau[(debut + fin) / 2], mot))
+                string[] tableau = this.mots[longueur]; // On prend en tableau à analyser tous les mots de la longueur correspondant au mot
+                // Si entre le début et la fin, il n'y a qu'un mot
+                if (fin - debut == 2 && tableau[debut + 1] == mot) return true; // Ce mot est égal, on retourne true
+                if (fin - debut <= 2 && tableau[debut + 1] != mot) return false; // Ce mot est différent, on retourne false
+                if (tableau[debut] == mot) return true; // Si le mot à l'index debut est égal, on retourne true
+                if (tableau[fin] == mot) return true; // Si le mot à l'index fin est égal, on retourne true
+                switch (Comparaison(tableau[(debut + fin) / 2], mot)) // On compare deux chaînes de caractères entre elles
                 {
                     case -1:
                         {
+                            // tableau[(debut + fin) / 2] plus petit que mot
                             debut = (debut + fin) / 2;
                             return RechercheDichoRecursif(debut, fin, mot);
                             break;
                         }
                     case 0:
                         {
+                            // tableau[(debut + fin) / 2] égal à mot
                             return true;
                             break;
                         }
                     case 1:
                         {
+                            // tableau[(debut + fin) / 2] plus grand que mot
                             fin = (debut + fin) / 2;
                             return RechercheDichoRecursif(debut, fin, mot);
                             break;
@@ -105,22 +128,31 @@ namespace Parce_que_c_est_notre_projet
             }
             return false;
         }
-
-        public static int Compare(string stra, string strb)
+        /// <summary>
+        /// Comparaison de deux chaînes de caractères
+        /// </summary>
+        /// <param name="a">Chaîne A</param>
+        /// <param name="b">Chaîne B</param>
+        /// <returns>Entier :
+        /// -1 : la chaîne A est avant la chaîne B dans l'ordre alphabétique
+        /// 0 : les chaînes A et B sont identiques
+        /// 1 : la chaîne A est après la chaîne B dans l'ordre alphabétique
+        /// </returns>
+        public static int Comparaison(string a, string b)
         {
-            int retour = 0;
-            int longueur = strb.Length;
-            if (stra != strb)
+            int retour = 0; // Valeur de retour, par défaut 0
+            int longueur = b.Length;
+            if (a != b)
             {
                 bool fin = true;
                 for (int i = 0; i < longueur && fin; i++)
                 {
-                    if (stra[i] < strb[i])
+                    if (a[i] < b[i])
                     {
                         retour = -1;
                         fin = false;
                     }
-                    else if (stra[i] > strb[i])
+                    else if (a[i] > b[i])
                     {
                         retour = 1;
                         fin = false;

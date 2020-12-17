@@ -13,6 +13,10 @@ namespace Parce_que_c_est_notre_projet
 
 
         //Constructeur
+        /// <summary>
+        /// Constructeur d'un plateau
+        /// </summary>
+        /// <param name="filename">Nom du fichier de dés</param>
         public Plateau(string filename)
         {
             StreamReader fichier = new StreamReader(filename);
@@ -81,8 +85,13 @@ namespace Parce_que_c_est_notre_projet
 
 
         //Méthodes
-        public void Valeurs()
+        /// <summary>
+        /// Mélange des valeurs des dés (nouveau tirage)
+        /// La valeur prise en compte deviendra celle de la face supérieure
+        /// </summary>
+        public void MelangeValeurs()
         {
+            // Pour chaque case de la matrice, un nouveau lancer a lieu
             Random r = new Random();
             int compt = 0;
             for (int i = 0; i < this.valeurSup.GetLength(0); i++)
@@ -94,7 +103,10 @@ namespace Parce_que_c_est_notre_projet
                 }
             }
         }
-
+        /// <summary>
+        /// ToString d'un plateau
+        /// </summary>
+        /// <returns>Chaîne de caractères avec les valeurs actuelles de la face supérieure (destinée à l'affichage)</returns>
         public string ToString()
         {
             string s = "";
@@ -111,7 +123,13 @@ namespace Parce_que_c_est_notre_projet
             }
             return s;
         }
-
+        /// <summary>
+        /// Test de la condition d'adjacence dans un plateau
+        /// </summary>
+        /// <param name="mot">Mot à analyser</param>
+        /// <param name="posimot">Position du caractère du mot en cours d'étude (par défaut, 0)</param>
+        /// <param name="positionMot">Liste comportant les cases déjà étudies (par défaut nulle)</param>
+        /// <returns></returns>
         public bool Test_Plateau(string mot, int posimot, List<int> positionMot = null)
         {
             Console.WriteLine(mot);

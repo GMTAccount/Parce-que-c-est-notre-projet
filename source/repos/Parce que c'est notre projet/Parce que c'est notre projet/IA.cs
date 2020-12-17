@@ -6,6 +6,7 @@ namespace Parce_que_c_est_notre_projet
 {
     class IA
     {
-
+        private string[,] grilleActuelle;
+        private Dictionnaire[] dictionnaires;
     }
 }
