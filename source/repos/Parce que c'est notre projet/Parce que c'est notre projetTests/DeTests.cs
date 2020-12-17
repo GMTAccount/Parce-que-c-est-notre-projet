@@ -12,14 +12,14 @@ namespace Parce_que_c_est_notre_projet.Tests
         [TestMethod()]
         public void DeTestMauvaisNombreFaces()
         {
-            De test = new De("A; B; C", 6);
+            De test = new De("A;B;C", 6);
             Assert.AreEqual(3, test.Des.Length);
         }
         [TestMethod()]
         public void toStringTest()
         {
-            De test = new De("A; B; C", 3);
-            Assert.AreEqual("A B C", test.toString());
+            De test = new De("A;B;C", 3);
+            Assert.AreEqual("A B C ", test.toString());
         }
     }
 }
