@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Parce_que_c_est_notre_projet
 {
-    class Joueur
+    public class Joueur
     {
         //Champs
         string nom;
@@ -86,9 +86,12 @@ namespace Parce_que_c_est_notre_projet
         public string toString()
         {
             string text = ("Le score de " + this.nom + " est de " + this.score + ", grâce aux mots cités suivent :\n");
-            foreach (string y in this.motsTrouves)
+            if(this.motsTrouves != null && this.motsTrouves.Count != 0)
             {
-                text = text + y + " ";
+                foreach (string y in this.motsTrouves)
+                {
+                    text = text + y + " ";
+                }
             }
             return text;
         }

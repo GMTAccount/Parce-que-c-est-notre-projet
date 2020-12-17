@@ -27,18 +27,6 @@ namespace Parce_que_c_est_notre_projet
             this.mondico[0] = new Dictionnaire(fichierDico[0], "FR");
             this.monplateau = new Plateau(fichierDes);
         }
-        public Jeu()
-        {
-            this.mondico = new Dictionnaire[1];
-            /*for(int i = 0; i < fichierDico.Length; i++)
-            {
-                Console.WriteLine("Veuillez donner un nom à votre langue : ");
-                this.mondico[i] = new Dictionnaire(new StreamReader(fichierDico[i]), Console.ReadLine());
-
-            }*/
-            this.mondico[0] = new Dictionnaire("MotsPossibles.txt", "FR");
-            this.monplateau = new Plateau();
-        }
         /// <summary>
         /// Retour du plateau assicié au jeu en cours (pour la méthode Test_Plateau et l'affichage, principalement)
         /// </summary>

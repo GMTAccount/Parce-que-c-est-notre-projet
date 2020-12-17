@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Parce_que_c_est_notre_projet
 {
-    class Dictionnaire
+    public class Dictionnaire
     {
         //Champs
         private string langue;
@@ -139,7 +139,7 @@ namespace Parce_que_c_est_notre_projet
         /// 0 : les chaînes A et B sont identiques
         /// 1 : la chaîne A est après la chaîne B dans l'ordre alphabétique
         /// </returns>
-        public static int Comparaison(string a, string b)
+        public int Comparaison(string a, string b)
         {
             // Mise en majuscule des mots
             a = a.ToUpper();

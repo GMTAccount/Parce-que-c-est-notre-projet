@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Parce_que_c_est_notre_projet
 {
-    class Plateau
+    public class Plateau
     {
         // Champs
         private List<De> des = new List<De>();
@@ -17,7 +17,7 @@ namespace Parce_que_c_est_notre_projet
         /// Constructeur d'un plateau
         /// </summary>
         /// <param name="filename">Nom du fichier de dés</param>
-        public Plateau(string filename)
+        public Plateau(string filename, string[,] matrice = null)
         {
             StreamReader fichier = new StreamReader(filename);
             bool testNbDe = true;
@@ -30,7 +30,14 @@ namespace Parce_que_c_est_notre_projet
                     this.des.Add(new De(ligne));
                 }
                 while (ligne != null);
-                this.valeurSup = new string[(int) Math.Pow(des.Count, 0.5), (int) Math.Pow(des.Count, 0.5)];
+                if(matrice == null)
+                {
+                    this.valeurSup = new string[(int)Math.Pow(des.Count, 0.5), (int)Math.Pow(des.Count, 0.5)];
+                }
+                else
+                {
+                    this.valeurSup = matrice;
+                }
             }
             catch (FileNotFoundException erreur)
             {
@@ -49,40 +56,6 @@ namespace Parce_que_c_est_notre_projet
                 }
             }
         }
-        public Plateau()
-        {
-            string filename = "Des.txt";
-            StreamReader fichier = new StreamReader(filename);
-            bool testNbDe = true;
-            try
-            {
-                string ligne = "";
-                do
-                {
-                    ligne = fichier.ReadLine();
-                    this.des.Add(new De(ligne));
-                }
-                while (ligne != null);
-                this.valeurSup = new string[4, 4] { { "J", "L", "R", "T"}, { "A", "Z", "E", "M"}, { "E", "E", "I", "G" }, { "W", "H", "O", "E" } } ;
-            }
-            catch (FileNotFoundException erreur)
-            {
-                Console.WriteLine("Le fichier correspondant n'a pas pu être trouvé");
-                Console.WriteLine(erreur.Message);
-            }
-            catch (Exception erreur)
-            {
-                Console.WriteLine(erreur.Message);
-            }
-            finally
-            {
-                if (fichier != null)
-                {
-                    fichier.Close();
-                }
-            }
-        }
-
 
         //Méthodes
         /// <summary>
