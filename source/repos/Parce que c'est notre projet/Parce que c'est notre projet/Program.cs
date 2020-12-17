@@ -8,7 +8,7 @@ namespace Parce_que_c_est_notre_projet
     {
         static void Main(string[] args)
         {
-            Console.Title = "Bienvenue dans Boogle !";
+            /*Console.Title = "Bienvenue dans Boogle !";
             Console.ForegroundColor = ConsoleColor.Green;
             string[] fichierDico = { "MotsPossibles.txt" };
             string fichierDes = "Des.txt";
@@ -43,7 +43,7 @@ namespace Parce_que_c_est_notre_projet
                 test = int.TryParse(Console.ReadLine(), out duree);
                 duree = duree * nbJoueurs;
             }
-            while (!test && duree <= 0);*/
+            while (!test && duree <= 0);
             nbJoueurs = 2;
             Joueur[] tab = new Joueur[nbJoueurs];
             tab[0] = new Joueur("Paul");
@@ -197,7 +197,13 @@ namespace Parce_que_c_est_notre_projet
                 Console.WriteLine((tableauScores.Count - i) + " " + noms[i] + " " + scores[i]);
             }
             Console.WriteLine();
-            Console.ReadKey();
+            Console.ReadKey();*/
+            Console.Title = "Bienvenue dans le crash du siècle (pire que Wall Street) !";
+            Dictionnaire[] dico = new Dictionnaire[1];
+            dico[0] = new Dictionnaire("MotsPossibles.txt", "FR");
+            IA ia = new IA(dico, 0);
+            ia.RechercheMots();
+
         }
     }
 }

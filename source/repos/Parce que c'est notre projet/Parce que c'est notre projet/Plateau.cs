@@ -17,6 +17,7 @@ namespace Parce_que_c_est_notre_projet
         /// Constructeur d'un plateau
         /// </summary>
         /// <param name="filename">Nom du fichier de dés</param>
+        /// <param name="matrice">Matrice pour les tests unitaires (null sinon)</param>
         public Plateau(string filename, string[,] matrice = null)
         {
             StreamReader fichier = new StreamReader(filename);
@@ -56,7 +57,13 @@ namespace Parce_que_c_est_notre_projet
                 }
             }
         }
-
+        /// <summary>
+        /// Retour des valeurs supérieures (pour l'IA)
+        /// </summary>
+        public string[,] ValeurSup
+        {
+            get { return this.valeurSup; }
+        }
         //Méthodes
         /// <summary>
         /// Mélange des valeurs des dés (nouveau tirage)
