@@ -8,8 +8,18 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
 {
     public class Program
     {
+        private static void FinTemps(Object source, ElapsedEventArgs e)
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Vous n'avez plus le temps, c'est fini");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("Appuyez sur Enter pour continuer");
+        }
         static void Main(string[] args)
         {
+            // Création de deux timers, l'un pour le temps d'une partie, l'autre pour le temps d'un tour
+            Timer temps = new Timer();
             Console.Title = "Bienvenue dans Boggle !";
             Console.ForegroundColor = ConsoleColor.Green;
             string[] fichierDico = { "MotsPossibles.txt" };
@@ -72,7 +82,7 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                 while (keyInfo.Key != ConsoleKey.Enter);
                 Console.Clear();
                 DateTime dateDebut = DateTime.Now;
-                DateTime dateFin = DateTime.Now + TimeSpan.FromSeconds(30);
+                DateTime dateFin = DateTime.Now + TimeSpan.FromMinutes(duree);
                 while (DateTime.Compare(DateTime.Now, dateFin) < 0)
                 {
                     for (int i = 0; i < nbJoueurs; i++)
@@ -82,7 +92,12 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("C'est au tour de " + tab[i].Nom + " de jouer");
                         Console.WriteLine();
-                        DateTime finChrono = DateTime.Now + TimeSpan.FromSeconds(6);
+                        DateTime finChrono = DateTime.Now + TimeSpan.FromSeconds(60);
+                        temps.Interval = 60000;
+                        temps.Elapsed += FinTemps;
+                        temps.AutoReset = true;
+                        temps.Enabled = true;
+                        temps.Start();
                         while (DateTime.Compare(DateTime.Now, finChrono) < 0)
                         {
                             Console.ForegroundColor = ConsoleColor.White;
@@ -94,7 +109,14 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                             string mot = "";
                             do
                             {
-                                key = Console.ReadKey();
+                                if(DateTime.Compare(DateTime.Now, finChrono) < 0)
+                                {
+                                    key = Console.ReadKey();
+                                }
+                                else
+                                {
+                                    key = new ConsoleKeyInfo('a', ConsoleKey.Enter, false, false, false);
+                                }
                                 switch (key.Key)
                                 {
                                     case ConsoleKey.Enter:
@@ -285,6 +307,11 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                     Console.WriteLine("C'est à votre tour de jouer");
                     Console.WriteLine();
                     DateTime finChrono = DateTime.Now + TimeSpan.FromSeconds(60);
+                    temps.Interval = 60000;
+                    temps.Elapsed += FinTemps;
+                    temps.AutoReset = true;
+                    temps.Enabled = true;
+                    temps.Start();
                     while (DateTime.Compare(DateTime.Now, finChrono) < 0)
                     {
                         Console.ForegroundColor = ConsoleColor.White;
@@ -398,8 +425,8 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                             Console.WriteLine("Vous avez dépassé le temps règlementaire.");
                         }
                         Console.Clear();
-                        joueur.ClearAllList();
                     }
+                    joueur.ClearAllList();
                     boogle.Monplateau.MelangeValeurs();
                     Console.WriteLine(boogle.Monplateau.ToString());
                     winner.RechercheMots(boogle.Monplateau);
