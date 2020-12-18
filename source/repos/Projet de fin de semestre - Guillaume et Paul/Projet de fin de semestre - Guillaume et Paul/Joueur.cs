@@ -7,9 +7,9 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
     public class Joueur
     {
         //Champs
-        string nom;
-        int score;
-        List<string> motsTrouves;
+        string nom; // Nom du joueur
+        int score; // Score du joueur
+        List<string> motsTrouves; // Liste des mots trouvés durant un seul tour par un joueur
 
 
         //Constructeur
@@ -101,6 +101,7 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
         }
         /// <summary>
         /// Suppression de tous les mots trouvés par un joueur au cours d'une partie
+        /// (Utile pour le changement de tours)
         /// </summary>
         public void ClearAllList()
         {

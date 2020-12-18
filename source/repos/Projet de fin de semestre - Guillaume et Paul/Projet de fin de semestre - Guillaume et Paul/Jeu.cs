@@ -6,8 +6,8 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
 {
     public class Jeu
     {
-        private Dictionnaire[] mondico;
-        private Plateau monplateau;
+        private Dictionnaire[] mondico; // tableau des dictionnaires
+        private Plateau monplateau; // Plateau de jeu actuel
 
         /// <summary>
         /// Constructeur d'un jeu
@@ -17,15 +17,16 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
         /// <param name="fichierDes">Nom du fichier avec les dés</param>
         public Jeu(string[] fichierDico, string[] nomLangues, string fichierDes)
         {
-            this.mondico = new Dictionnaire[fichierDico.Length];
+            this.mondico = new Dictionnaire[fichierDico.Length]; // Création du tableau de dictionnaires
+            // On test si les tableaux ne sont pas nuls, et s'il y a bien autant de langues que de dictionnaires
             if (fichierDico != null && fichierDico.Length != 0 && nomLangues != null && nomLangues.Length != 0 && fichierDico.Length == nomLangues.Length)
             {
                 for (int i = 0; i < fichierDico.Length; i++)
                 {
-                    this.mondico[i] = new Dictionnaire(fichierDico[i], nomLangues[i]);
-
+                    this.mondico[i] = new Dictionnaire(fichierDico[i], nomLangues[i]); // Création puis affectation des dictioinnaires
                 }
             }
+            // Création du plateau
             this.monplateau = new Plateau(fichierDes);
         }
         /// <summary>
@@ -53,7 +54,7 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
         /// <returns>Booléen : true = mot valide, false = mot invalide (non existant ou contrainte d'adjacence)</returns>
         public bool Verification(string mot, int choixLangue)
         {
-            if (mot.Length > 15) return false;
+            if (mot.Length > 15) return false; // Mot trop long (longueur max dans le dictionnaire : 15 mots)
             return (this.mondico[choixLangue].RechercheDichoRecursif(0, this.mondico[choixLangue].Mots[mot.Length].Length - 1, mot) && this.monplateau.Test_Plateau(mot, 0));
         }
     }

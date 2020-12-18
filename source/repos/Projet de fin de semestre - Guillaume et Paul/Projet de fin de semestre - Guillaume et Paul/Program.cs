@@ -22,6 +22,11 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("Appuyez sur Enter pour continuer");
         }
+        /// <summary>
+        /// Méthode qui enclenche la suggestion d'un mot par l'IA lorsque le joueur est en difficulté (n'a pas trouvé de mots au bout de 40 secondes)
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="e"></param>
         static void SuggestionIA(Object source, ElapsedEventArgs e)
         {
             Console.ForegroundColor = ConsoleColor.White;
@@ -32,12 +37,12 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
         static void Main(string[] args)
         {
             // Création de deux timers, l'un pour le temps d'un tour, l'autre pour que l'IA conseille un mot au joueur si celui-ci n'en a trouvé aucun
-            Timer temps = new Timer();
-            Timer tempsIA = new Timer();
-            tempsIA.Interval = 40000;
-            tempsIA.Elapsed += SuggestionIA;
-            temps.Interval = 60000;
-            temps.Elapsed += FinTemps;
+            Timer temps = new Timer(); // Timer de temps de jeu
+            Timer tempsIA = new Timer(); // Timer avant l'affichage de la proposition d'aide de l'IA
+            tempsIA.Interval = 40000; // Durée d'attente avant affichage (et activation) de l'aide de l'IA
+            tempsIA.Elapsed += SuggestionIA; // On attache au timer la méthode d'activation de l'aide de l'IA
+            temps.Interval = 60000; // Durée d'attente avant affichage de fin de tour
+            temps.Elapsed += FinTemps; // On attache au timer la méthode d'affichage de fin de tour
             Console.Title = "Bienvenue dans Boggle !";
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             string[] fichierDico = { "MotsPossibles.txt" };
@@ -106,7 +111,6 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                 }
                 while (keyInfo.Key != ConsoleKey.Enter);
                 Console.Clear();
-                DateTime dateDebut = DateTime.Now;
                 DateTime dateFin = DateTime.Now + TimeSpan.FromMinutes(duree);
                 while (DateTime.Compare(DateTime.Now, dateFin) < 0)
                 {
@@ -131,15 +135,8 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                             Console.WriteLine("Saisissez un nouveau mot trouvé");
                             ConsoleKeyInfo key;
                             string mot = "";
-                            test = false;
                             do
                             {
-                                if (tab[i].MotTrouve.Count == 0 && !test)
-                                {
-                                    tempsIA.Enabled = true;
-                                    tempsIA.Start();
-                                    test = true;
-                                }
                                 if (DateTime.Compare(DateTime.Now, finChrono) < 0)
                                 {
                                     key = Console.ReadKey();
@@ -240,27 +237,27 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                                         }
                                         tab[i].Score = score;
                                         Console.WriteLine(tab[i].toString());
-                                        Console.ReadKey();
+                                        Console.WriteLine();
                                     }
                                     else
                                     {
                                         Console.ForegroundColor = ConsoleColor.Red;
                                         Console.WriteLine("Ce mot n'existe pas ou n'est pas dans la grille actuelle.");
-                                        Console.ReadKey();
+                                        Console.WriteLine();
                                     }
                                 }
                                 else if (DateTime.Compare(DateTime.Now, finChrono) < 0 && key.Key != ConsoleKey.Enter)
                                 {
                                     Console.ForegroundColor = ConsoleColor.Red;
                                     Console.WriteLine("Vous avez déjà trouvé ce mot, on ne peut pas le remettre.");
-                                    Console.ReadKey();
+                                    Console.WriteLine();
                                 }
                             }
                             else if (DateTime.Compare(DateTime.Now, finChrono) < 0 && mot != "")
                             {
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("Le mot saisi est trop court.");
-                                Console.ReadKey();
+                                Console.WriteLine();
                             }
                             Console.WriteLine();
                         }
@@ -294,6 +291,7 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                 Console.Beep(3000, 500);
                 Console.Beep(2000, 500);
                 Console.Beep(3000, 1000);
+                Console.ReadKey();
             }
             else
             {
@@ -448,27 +446,23 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                                     }
                                     joueur.Score = score;
                                     Console.WriteLine(joueur.toString());
-                                    Console.ReadKey();
                                 }
                                 else
                                 {
                                     Console.ForegroundColor = ConsoleColor.Red;
                                     Console.WriteLine("Ce mot n'existe pas ou n'est pas dans la grille actuelle.");
-                                    Console.ReadKey();
                                 }
                             }
                             else if (DateTime.Compare(DateTime.Now, finChrono) < 0 && key.Key != ConsoleKey.Enter)
                             {
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("Vous avez déjà trouvé ce mot, on ne peut pas le remettre.");
-                                Console.ReadKey();
                             }
                         }
                         else if (DateTime.Compare(DateTime.Now, finChrono) < 0)
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("Le mot saisi est trop court.");
-                            Console.ReadKey();
                         }
                         Console.WriteLine();
                     }
@@ -547,6 +541,7 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                 Console.Beep(3000, 500);
                 Console.Beep(2000, 500);
                 Console.Beep(3000, 1000);
+                Console.ReadKey();
             }
             Console.ReadKey();
             Console.Clear();

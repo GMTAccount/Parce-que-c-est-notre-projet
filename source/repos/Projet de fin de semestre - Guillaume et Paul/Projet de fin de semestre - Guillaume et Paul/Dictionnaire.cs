@@ -8,8 +8,8 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
     public class Dictionnaire
     {
         //Champs
-        private string langue;
-        private SortedList<int, string[]> mots = new SortedList<int, string[]>();
+        private string langue; // Nom de la langue
+        private SortedList<int, string[]> mots = new SortedList<int, string[]>(); // Mots dans le dictionnaire (classés par taille)
 
 
         //Constructeur
@@ -21,6 +21,7 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
         public Dictionnaire(string filename, string langue)
         {
             this.langue = langue;
+            this.mots = new SortedList<int, string[]>();
             bool testFace = true;
             bool testNbDe = true;
             StreamReader fichier = new StreamReader(filename);

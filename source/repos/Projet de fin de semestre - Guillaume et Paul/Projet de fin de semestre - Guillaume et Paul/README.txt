@@ -5,3 +5,5 @@ Nous avons décidé qu'à chaque changement de joueur, le plateau change, pour �
 L'intégralité de ce code est sous licence Creative Commons - Attribution - Partage dans les mêmes conditions 4.0 International
 Plus d'informations sur : https://creativecommons.org/licenses/by-sa/4.0/
 Les auteurs sont Guillaume TADJER et Paul SORET
+
+(Ce jeu est techniquement jouable avec au moins une personne, il n'y a pas de limite de joueurs, mais un nombre trop grand de joueurs peut altérer la qualité du gameplay)

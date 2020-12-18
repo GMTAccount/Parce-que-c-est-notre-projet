@@ -15,7 +15,7 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
         /// <summary>
         /// Constructeur d'un joueur de type IA
         /// </summary>
-        /// <param name="dico">Tableau de dictionnaire</param>
+        /// <param name="jeu">Jeu en cours</param>
         /// <param name="langue">Langue souhaitée</param>
         public IA(Jeu jeu, int langue)
         {

@@ -7,7 +7,7 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
     public class De
     {
         // Champs
-        private string[] des;
+        private string[] des; // Tableau de chaînes de caractères caractérisant le dé
 
 
         //Constructeur
@@ -15,16 +15,14 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
         /// Constructeur d'un dé
         /// </summary>
         /// <param name="ligneDe">Ligne caractérisant un dé</param>
-        /// <param name="nbFaces">Nombre de faces du dé</param>
+        /// <param name="nbFaces">Nombre de faces du dé (par défaut 6)</param>
         public De(string ligneDe, int nbFaces = 6)
         {
-            bool testFace = true;
             if (ligneDe != null)
             {
                 this.des = ligneDe.Split(";");
                 if (this.des.Length != nbFaces)
                 {
-                    testFace = false;
                     Console.WriteLine("Erreur : le nombre de faces est différent de " + nbFaces);
                 }
             }

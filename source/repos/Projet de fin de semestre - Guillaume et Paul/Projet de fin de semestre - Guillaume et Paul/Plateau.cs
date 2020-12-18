@@ -8,8 +8,8 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
     public class Plateau
     {
         // Champs
-        private List<De> des = new List<De>();
-        private string[,] valeurSup;
+        private List<De> des = new List<De>(); // Liste de dés
+        private string[,] valeurSup; // Matrices des faces supérieures des dés
 
 
         //Constructeur
@@ -171,7 +171,7 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                                     positionMot.Add(i);
                                     positionMot.Add(j);
                                     estPresent = Test_Plateau(mot, posimot + 1, positionMot); // On va ensuite chercher les autres lettres du mot
-                                    positionMot.RemoveAt(positionMot.Count - 1); // Par défaut, on retire ces positions de la liste (pour éviter des tests inutiles)
+                                    positionMot.RemoveAt(positionMot.Count - 1); // Par défaut, on retire ces positions de la liste (pour pouvoir retravailler sur cette position si estPresent est false)
                                     positionMot.RemoveAt(positionMot.Count - 1);
                                 }
                                 if (estPresent) // Si on a en retour true, on le retourne immédiatement, mettant fin à la récursivité
