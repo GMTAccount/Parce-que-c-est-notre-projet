@@ -6,11 +6,11 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
 {
     public class IA
     {
-        private Jeu jeu;
-        private List<string> motsTrouves;
-        private List<string> dictionnaire;
-        private string[,] valeurSup;
-        private List<string> motsDejaDonnes;
+        private Jeu jeu; // Jeu actuel
+        private List<string> motsTrouves; // Liste de tous les mots trouvés par l'IA sur une grille
+        private List<string> dictionnaire; // Liste de tous les mots dans le dictionnaire de la langue choisie
+        private string[,] valeurSup; // Grille des valeurs supérieures
+        private List<string> motsDejaDonnes; // Liste de tous les mots donnés par l'IA en un tour
         private int score;
         /// <summary>
         /// Constructeur d'un joueur de type IA
@@ -32,7 +32,6 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
             }
             this.jeu = jeu;
             this.dictionnaire.Sort();
-            jeu.Monplateau.MelangeValeurs();
             this.valeurSup = jeu.Monplateau.ValeurSup;
         }
         /// <summary>

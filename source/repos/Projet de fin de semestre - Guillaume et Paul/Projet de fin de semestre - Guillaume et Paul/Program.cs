@@ -8,29 +8,44 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
 {
     public class Program
     {
+        static bool suggestionIA = false; // Booléen qui nous informera s'il est possible de voir la suggestion de l'IA ou non
         /// <summary>
         /// Méthode enclenchée à la fin du temps de réponse imparti
         /// </summary>
         /// <param name="source"></param>
         /// <param name="e"></param>
-        private static void FinTemps(Object source, ElapsedEventArgs e)
+        static void FinTemps(Object source, ElapsedEventArgs e)
         {
-            Console.Beep(1750, 1000);
-            Console.Clear();
+            Console.Beep(1750, 500);
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Vous n'avez plus le temps, c'est fini");
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("Appuyez sur Enter pour continuer");
         }
+        static void SuggestionIA(Object source, ElapsedEventArgs e)
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("Notre IA a une petite suggestion pour vous !");
+            Console.WriteLine("Appuyez sur Espace pour la découvrir");
+            suggestionIA = true;
+        }
         static void Main(string[] args)
         {
-            // Création de deux timers, l'un pour le temps d'une partie, l'autre pour le temps d'un tour
+            // Création de deux timers, l'un pour le temps d'un tour, l'autre pour que l'IA conseille un mot au joueur si celui-ci n'en a trouvé aucun
             Timer temps = new Timer();
+            Timer tempsIA = new Timer();
+            tempsIA.Interval = 40000;
+            tempsIA.Elapsed += SuggestionIA;
+            temps.Interval = 60000;
+            temps.Elapsed += FinTemps;
             Console.Title = "Bienvenue dans Boggle !";
-            Console.ForegroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             string[] fichierDico = { "MotsPossibles.txt" };
             string[] nomLangues = { "Français" };
             string fichierDes = "Des.txt";
+            Console.WriteLine("Bienvenue dans Boogle !");
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.White;
             int duree = 0;
             bool test = false;
             int nbJoueurs = 0;
@@ -46,14 +61,15 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                 test = int.TryParse(Console.ReadLine(), out langueJeu);
                 langueJeu--;
             }
-            while (!test && (langueJeu < 0 || langueJeu >= nomLangues.Length));
+            while (!test || (langueJeu < 0 || langueJeu >= nomLangues.Length));
+            Console.WriteLine();
             do
             {
                 Console.WriteLine("Combien de joueurs autour de la table ?");
                 Console.WriteLine("(Pour jouer contre notre invincible IA, tapez 1)");
                 test = int.TryParse(Console.ReadLine(), out nbJoueurs);
             }
-            while (!test && nbJoueurs <= 0);
+            while (!test || nbJoueurs <= 0);
             Jeu boogle = new Jeu(fichierDico, nomLangues, fichierDes);
             if (nbJoueurs > 1)
             {
@@ -61,25 +77,28 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                 for (int i = 0; i < nbJoueurs; i++)
                 {
                     string nomJoueur = "";
-                    Console.Clear();
+                    Console.WriteLine();
                     do
                     {
                         Console.WriteLine("Veuillez entrer le nom du joueur n°" + (i + 1) + " :");
                         nomJoueur = Console.ReadLine().ToUpper();
                     }
-                    while (nomJoueur == null && nomJoueur.Length != 0);
+                    while (nomJoueur == null || nomJoueur.Length == 0);
                     tab[i] = new Joueur(nomJoueur.ToUpper());
                 }
-                Console.Clear();
+                Console.WriteLine();
                 do
                 {
                     Console.WriteLine("Combien de fois voulez-vous jouer chacun ?");
                     test = int.TryParse(Console.ReadLine(), out duree);
                 }
-                while (!test && duree <= 0);
+                while (!test || duree <= 0);
                 duree = duree * nbJoueurs;
+                Console.WriteLine();
                 Console.Title = "Attention, le jeu va commmencer !!!";
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Pour lancer le chronomètre, appuyez sur Enter");
+                Console.WriteLine("Que le meilleur gagne !");
                 ConsoleKeyInfo keyInfo = new ConsoleKeyInfo();
                 do
                 {
@@ -93,17 +112,16 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                 {
                     for (int i = 0; i < nbJoueurs; i++)
                     {
+                        tempsIA.AutoReset = false;
+                        temps.AutoReset = false;
+                        temps.Enabled = true;
+                        tempsIA.Enabled = true;
                         Console.Title = (tab[i].Nom + " est en train de jouer");
                         boogle.Monplateau.MelangeValeurs();
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("C'est au tour de " + tab[i].Nom + " de jouer");
                         Console.WriteLine();
                         DateTime finChrono = DateTime.Now + TimeSpan.FromSeconds(60);
-                        temps.Interval = 60000;
-                        temps.Elapsed += FinTemps;
-                        temps.AutoReset = true;
-                        temps.Enabled = true;
-                        temps.Start();
                         while (DateTime.Compare(DateTime.Now, finChrono) < 0)
                         {
                             Console.ForegroundColor = ConsoleColor.White;
@@ -113,9 +131,16 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                             Console.WriteLine("Saisissez un nouveau mot trouvé");
                             ConsoleKeyInfo key;
                             string mot = "";
+                            test = false;
                             do
                             {
-                                if(DateTime.Compare(DateTime.Now, finChrono) < 0)
+                                if (tab[i].MotTrouve.Count == 0 && !test)
+                                {
+                                    tempsIA.Enabled = true;
+                                    tempsIA.Start();
+                                    test = true;
+                                }
+                                if (DateTime.Compare(DateTime.Now, finChrono) < 0)
                                 {
                                     key = Console.ReadKey();
                                 }
@@ -123,36 +148,54 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                                 {
                                     key = new ConsoleKeyInfo('a', ConsoleKey.Enter, false, false, false);
                                 }
-                                switch (key.Key)
+                                if(DateTime.Compare(DateTime.Now, finChrono) < 0)
                                 {
-                                    case ConsoleKey.Enter:
-                                    case ConsoleKey.Spacebar:
-                                        {
-                                            break;
-                                        }
-                                    case ConsoleKey.Backspace:
-                                        {
-                                            if (mot.Length > 0)
+                                    switch (key.Key)
+                                    {
+                                        case ConsoleKey.Enter:
                                             {
-                                                string mot1 = "";
-                                                for (int j = 0; j < mot.Length - 1; j++)
-                                                {
-                                                    mot1 = mot1 + mot[j];
-                                                }
-                                                mot = mot1;
+                                                break;
                                             }
-                                            break;
-                                        }
-                                    case ConsoleKey.Delete:
-                                        {
-                                            mot = "";
-                                            break;
-                                        }
-                                    default:
-                                        {
-                                            mot = mot + key.KeyChar;
-                                            break;
-                                        }
+                                        case ConsoleKey.Spacebar:
+                                            {
+                                                if (tab[i].MotTrouve.Count == 0 && suggestionIA)
+                                                {
+                                                    IA iA = new IA(boogle, langueJeu);
+                                                    iA.RechercheMots(boogle.Monplateau);
+                                                    Console.WriteLine("Notre IA vous suggère : " + iA.DistributionMots());
+                                                    Console.WriteLine("Appuyez sur Enter pour continuer et pouvoir saisir ce mot");
+                                                    Console.ForegroundColor = ConsoleColor.Magenta;
+                                                    tempsIA.Enabled = false;
+                                                    Console.ReadKey();
+                                                }
+                                                mot = "";
+                                                suggestionIA = false;
+                                                break;
+                                            }
+                                        case ConsoleKey.Backspace:
+                                            {
+                                                if (mot.Length > 0)
+                                                {
+                                                    string mot1 = "";
+                                                    for (int j = 0; j < mot.Length - 1; j++)
+                                                    {
+                                                        mot1 = mot1 + mot[j];
+                                                    }
+                                                    mot = mot1;
+                                                }
+                                                break;
+                                            }
+                                        case ConsoleKey.Delete:
+                                            {
+                                                mot = "";
+                                                break;
+                                            }
+                                        default:
+                                            {
+                                                mot = mot + key.KeyChar;
+                                                break;
+                                            }
+                                    }
                                 }
                             }
                             while (DateTime.Compare(DateTime.Now, finChrono) < 0 && key.Key != ConsoleKey.Enter);
@@ -164,6 +207,7 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                                 {
                                     if (boogle.Verification(mot, langueJeu))
                                     {
+                                        tempsIA.Enabled = false;
                                         tab[i].Add_Mot(mot);
                                         int score = 0;
                                         switch (mot.Length)
@@ -212,20 +256,17 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                                     Console.ReadKey();
                                 }
                             }
-                            else if (DateTime.Compare(DateTime.Now, finChrono) < 0)
+                            else if (DateTime.Compare(DateTime.Now, finChrono) < 0 && mot != "")
                             {
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("Le mot saisi est trop court.");
                                 Console.ReadKey();
                             }
-                            else
-                            {
-                                Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine("Vous avez dépassé le temps règlementaire.");
-                            }
-                            Console.Clear();
+                            Console.WriteLine();
                         }
                         tab[i].ClearAllList();
+                        Console.Clear();
+                        temps.Enabled = false;
                     }
                 }
                 SortedList<int, string> tableauScores = new SortedList<int, string>();
@@ -256,35 +297,35 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
             }
             else
             {
+                Console.WriteLine();
                 string nomJoueur = "";
-                Console.Clear();
                 do
                 {
                     Console.WriteLine("Veuillez entrer votre nom :");
                     nomJoueur = Console.ReadLine().ToUpper();
                 }
-                while (nomJoueur == null && nomJoueur.Length != 0);
+                while (nomJoueur == null || nomJoueur.Length == 0);
                 Joueur joueur = new Joueur(nomJoueur.ToUpper());
-                Console.Clear();
+                Console.WriteLine();
                 do
                 {
                     Console.WriteLine("Combien de fois voulez-vous affronter notre terrible IA ?");
                     test = int.TryParse(Console.ReadLine(), out duree);
                 }
-                while (!test && duree <= 0);
-                Console.Clear();
+                while (!test || duree <= 0);
+                Console.WriteLine();
                 int choix = 0;
                 do
                 {
                     Console.WriteLine("Pour notre IA, souhaitez-vous qu'elle soit" +
                         "\n1 - Un peu imbattable" +
                         "\n2 - Invincible sans plus" +
-                        "\n3 - ELLE VA TOUT DÉTRIURE" +
+                        "\n3 - ELLE VA TOUT DÉTRUIRE" +
                         "\nVeuillez saisir le chiffre correspondant" +
                         "\n(PS : cherchez pas, vous allez perdre, y a pas d'autres issues. MOUHAHAHAHA)");
                     test = int.TryParse(Console.ReadLine(), out choix);
                 }
-                while (!test && (choix <= 0 || choix > 3));
+                while (!test || (choix <= 0 || choix > 3));
                 int[] intervalleValeursIA = null;
                 switch (choix)
                 {
@@ -310,16 +351,14 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                 DateTime dateFin = DateTime.Now + TimeSpan.FromMinutes(duree);
                 while (DateTime.Compare(DateTime.Now, dateFin) < 0)
                 {
+                    temps.AutoReset = false;
+                    temps.Enabled = true;
                     Console.Title = (joueur.Nom + " est en train de sauver son honneur face à notre formidable IA");
                     boogle.Monplateau.MelangeValeurs();
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("C'est à votre tour de jouer");
                     Console.WriteLine();
                     DateTime finChrono = DateTime.Now + TimeSpan.FromSeconds(60);
-                    temps.Interval = 60000;
-                    temps.Elapsed += FinTemps;
-                    temps.AutoReset = true;
-                    temps.Enabled = true;
                     temps.Start();
                     while (DateTime.Compare(DateTime.Now, finChrono) < 0)
                     {
@@ -333,36 +372,39 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                         do
                         {
                             key = Console.ReadKey();
-                            switch (key.Key)
+                            if(DateTime.Compare(DateTime.Now, finChrono) < 0)
                             {
-                                case ConsoleKey.Enter:
-                                case ConsoleKey.Spacebar:
-                                    {
-                                        break;
-                                    }
-                                case ConsoleKey.Backspace:
-                                    {
-                                        if (mot.Length > 0)
+                                switch (key.Key)
+                                {
+                                    case ConsoleKey.Enter:
+                                    case ConsoleKey.Spacebar:
                                         {
-                                            string mot1 = "";
-                                            for (int j = 0; j < mot.Length - 1; j++)
-                                            {
-                                                mot1 = mot1 + mot[j];
-                                            }
-                                            mot = mot1;
+                                            break;
                                         }
-                                        break;
-                                    }
-                                case ConsoleKey.Delete:
-                                    {
-                                        mot = "";
-                                        break;
-                                    }
-                                default:
-                                    {
-                                        mot = mot + key.KeyChar;
-                                        break;
-                                    }
+                                    case ConsoleKey.Backspace:
+                                        {
+                                            if (mot.Length > 0)
+                                            {
+                                                string mot1 = "";
+                                                for (int j = 0; j < mot.Length - 1; j++)
+                                                {
+                                                    mot1 = mot1 + mot[j];
+                                                }
+                                                mot = mot1;
+                                            }
+                                            break;
+                                        }
+                                    case ConsoleKey.Delete:
+                                        {
+                                            mot = "";
+                                            break;
+                                        }
+                                    default:
+                                        {
+                                            mot = mot + key.KeyChar;
+                                            break;
+                                        }
+                                }
                             }
                         }
                         while (DateTime.Compare(DateTime.Now, finChrono) < 0 && key.Key != ConsoleKey.Enter);
@@ -428,14 +470,12 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                             Console.WriteLine("Le mot saisi est trop court.");
                             Console.ReadKey();
                         }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Vous avez dépassé le temps règlementaire.");
-                        }
-                        Console.Clear();
+                        Console.WriteLine();
                     }
+                    temps.Enabled = false;
                     joueur.ClearAllList();
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine();
                     boogle.Monplateau.MelangeValeurs();
                     Console.WriteLine(boogle.Monplateau.ToString());
                     winner.RechercheMots(boogle.Monplateau);
@@ -481,8 +521,9 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                     Console.WriteLine(winner.ToString());
                     winner.ClearAllLists();
                 }
+                Console.WriteLine();
                 Console.Title = "Le moment fatidique des scores est enfin là !";
-                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("Et le grand gagnant est ...");
                 Console.ForegroundColor = ConsoleColor.White;
                 if (joueur.Score > winner.Score)
@@ -507,6 +548,21 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                 Console.Beep(2000, 500);
                 Console.Beep(3000, 1000);
             }
+            Console.ReadKey();
+            Console.Clear();
+            Console.WriteLine();
+            Console.Title = "C'était Boogle, par Guillaume TADJER et Paul SORET";
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("Ce jeu a été réalisé par Guillaume TADJER et Paul SORET");
+            Console.WriteLine("ESILV A2 S3 TD N (2)");
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("L'intégralité de ce code est placé sous licence CC-BY-SA 4.0 International");
+            Console.WriteLine("PLus d'informations sur ce que vous pouvez en faire sur : https://creativecommons.org/licenses/by-sa/4.0/");
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine("Présenté le 18 décembre 2020");
+            Console.ReadKey();
         }
     }
 }
