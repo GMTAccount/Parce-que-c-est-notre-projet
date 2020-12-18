@@ -9,12 +9,18 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul.Tests
     [TestClass()]
     public class DeTests
     {
+        /// <summary>
+        /// Test de création d'un dé avec peu de faces
+        /// </summary>
         [TestMethod()]
         public void DeTestMauvaisNombreFaces()
         {
             De test = new De("A;B;C", 6);
             Assert.AreEqual(3, test.Des.Length);
         }
+        /// <summary>
+        /// Test du ToString
+        /// </summary>
         [TestMethod()]
         public void toStringTest()
         {
