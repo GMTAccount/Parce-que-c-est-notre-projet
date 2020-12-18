@@ -27,12 +27,15 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul.Tests
             Dictionnaire test = new Dictionnaire("MotsPossibles.txt", "FR");
             string mot = "mot";
             int nbMots = 0;
-            IList<string[]> values = test.Mots.Values;
-            for(int i = 0; i < values.Count; i++)
+            List<string> mots = new List<string>();
+            for (int i = 3; i < 16; i++)
             {
-                nbMots = values[i].Length + nbMots;
+                foreach (string y in test.Mots[i])
+                {
+                    mots.Add(y);
+                }
             }
-            bool rechercheMot = test.RechercheDichoRecursif(0, nbMots, "MOT");
+            bool rechercheMot = test.RechercheDichoRecursif(0, mots.Count - 1, "AAAAAAA");
             Assert.AreEqual(true, rechercheMot);
         }
         [TestMethod()]
