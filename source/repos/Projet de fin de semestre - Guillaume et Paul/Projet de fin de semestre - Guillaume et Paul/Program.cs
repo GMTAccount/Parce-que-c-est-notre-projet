@@ -8,8 +8,14 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
 {
     public class Program
     {
+        /// <summary>
+        /// Méthode enclenchée à la fin du temps de réponse imparti
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="e"></param>
         private static void FinTemps(Object source, ElapsedEventArgs e)
         {
+            Console.Beep(1750, 1000);
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Vous n'avez plus le temps, c'est fini");
@@ -244,6 +250,9 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                 {
                     Console.WriteLine((tableauScores.Count - i) + " " + noms[i] + " " + scores[i]);
                 }
+                Console.Beep(3000, 500);
+                Console.Beep(2000, 500);
+                Console.Beep(3000, 1000);
             }
             else
             {
@@ -490,8 +499,13 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul
                 }
                 else
                 {
-
+                    Console.WriteLine("Aussi bizarre que cela puisse paraître, y a comme qui dirait une égalité");
+                    Console.WriteLine("Vous et notre IA avez le même nombre de points : " + joueur.Score + " points.");
+                    Console.WriteLine("Même les probas ne pouvaient prévoir ça !");
                 }
+                Console.Beep(3000, 500);
+                Console.Beep(2000, 500);
+                Console.Beep(3000, 1000);
             }
         }
     }
