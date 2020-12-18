@@ -25,17 +25,9 @@ namespace Projet_de_fin_de_semestre___Guillaume_et_Paul.Tests
         public void RechercheDichoOUI()
         {
             Dictionnaire test = new Dictionnaire("MotsPossibles.txt", "FR");
-            string mot = "mot";
+            string mot = "FAUX";
             int nbMots = 0;
-            List<string> mots = new List<string>();
-            for (int i = 3; i < 16; i++)
-            {
-                foreach (string y in test.Mots[i])
-                {
-                    mots.Add(y);
-                }
-            }
-            bool rechercheMot = test.RechercheDichoRecursif(0, mots.Count - 1, "AAAAAAA");
+            bool rechercheMot = test.RechercheDichoRecursif(0, test.Mots[mot.Length].Length - 1, mot);
             Assert.AreEqual(true, rechercheMot);
         }
         [TestMethod()]
